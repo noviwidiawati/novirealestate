@@ -588,6 +588,13 @@ table.rt{width:100%;border-collapse:collapse;font-size:.94rem}
 /* ===== contact ===== */
 .contact{--c-ink:#F1EBDD;--c-dim:rgba(241,235,221,.76);--c-mute:rgba(241,235,221,.6);--c-line:rgba(241,235,221,.16);--c-gold:#D6BE8E;--c-err:#F0A58F;
   background:var(--deep);color:var(--c-ink)}
+/* Contact: WebGL silk ribbon background */
+.contact{position:relative;isolation:isolate;overflow:hidden}
+.contact .silk-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.6s ease}
+.contact .silk-bg.on{opacity:1}
+.contact .wrap{position:relative;z-index:1}
+.contact .s3-head h2,.contact .s3-head .lede{text-shadow:0 2px 18px rgba(8,12,10,.65)}
+.contact .lf{-webkit-backdrop-filter:blur(10px) saturate(1.1);backdrop-filter:blur(10px) saturate(1.1)}
 .contact .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:clamp(36px,6vw,88px);align-items:start}
 .contact .eyebrow{color:var(--c-gold)}
 .contact .s3-head{margin-bottom:0}
@@ -2176,6 +2183,73 @@ void main() {
       layer.appendChild(dot); setTimeout(()=>dot.remove(),650);
     });
   });
+})();
+</script>
+<script>
+// ---- Contact: gold-edged silk ribbon (WebGL, no video)
+(function(){
+  const sec=document.getElementById("contact"); if(!sec) return;
+  const cv=document.createElement("canvas"); cv.className="silk-bg"; cv.setAttribute("aria-hidden","true"); sec.prepend(cv);
+  const gl=cv.getContext("webgl",{premultipliedAlpha:true,alpha:true,antialias:false}); if(!gl){cv.remove();return}
+  const vs="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+  const fs=`precision highp float;
+uniform vec2 R;uniform float T;uniform float M;uniform float S;uniform float C;uniform float X;
+// one ribbon: returns premultiplied rgba
+vec4 ribbon(vec2 uv,float cy,float amp,float wid,float spd,float seed,float strength){
+  float x=uv.x, t=T*spd+seed;
+  float c=cy+amp*(0.62*sin(x*2.1+t*.9)+0.38*sin(x*4.3-t*.7+seed*2.));
+  float dc=amp*(0.62*2.1*cos(x*2.1+t*.9)+0.38*4.3*cos(x*4.3-t*.7+seed*2.));
+  float tw=sin(x*1.9+t*.55+seed)*.8+sin(x*3.7-t*.4)*.2;          // twist
+  float w=wid*(.1+.9*abs(tw));                                      // apparent width
+  float slope=sqrt(1.+dc*dc*M*M);
+  float d=(uv.y-c)/(w*slope);                                         // -1..1 across the band
+  float aa=2.2/(R.y*w);
+  float inside=1.-smoothstep(1.-aa,1.+aa,abs(d));
+  if(inside<=0.) return vec4(0.);
+  float face=sign(tw);                                                // front / back side of silk
+  float curv=sqrt(max(0.,1.-d*d));
+  float light=.5+.5*sin(x*3.4+d*1.6*face-t*.6+seed);                  // travelling sheen
+  vec3 deep=vec3(.03,.05,.045), body=vec3(.06,.105,.09), sheen=vec3(.16,.26,.22);
+  vec3 col=mix(deep,body,curv);
+  col+=sheen*pow(light,3.)*curv*(face>0.?1.:.55);
+  // gold rim light along the edges (copper on the underside)
+  float rim=smoothstep(.72,.98,abs(d))*inside;
+  vec3 gold=vec3(.84,.71,.47), copper=vec3(.62,.38,.17);
+  vec3 rc=mix(copper,gold,smoothstep(-1.,1.,d*face));
+  float glint=.55+.45*sin(x*7.-t*1.3+seed*3.);
+  col+=rc*rim*(.55+.9*glint)*(.6+.4*abs(tw));
+  // thin bright filament on the top edge
+  float fil=smoothstep(.93,.995,d*face)*inside;
+  col+=vec3(1.,.93,.78)*fil*.55*glint;
+  float a=inside*strength*(.78+.22*curv);
+  return vec4(col*a,a);
+}
+void main(){
+  vec2 uv=gl_FragCoord.xy/R; uv.x*=X;
+  vec4 o=vec4(0.);
+  vec4 b=ribbon(uv,C+.09*S,.08*S,.055*S,.22,1.7,.5);   // faint back ribbon
+  vec4 f=ribbon(uv,C,.1*S,.085*S,.18,0.,.95);    // main ribbon
+  o=b; o=f+o*(1.-f.a);
+  gl_FragColor=o;
+}`;
+  const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS)){console.warn(gl.getShaderInfoLog(x));return null}return x};
+  const v=sh(gl.VERTEX_SHADER,vs),f=sh(gl.FRAGMENT_SHADER,fs); if(!v||!f){cv.remove();return}
+  const pr=gl.createProgram();gl.attachShader(pr,v);gl.attachShader(pr,f);gl.linkProgram(pr);gl.useProgram(pr);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const loc=gl.getAttribLocation(pr,"p");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  const uR=gl.getUniformLocation(pr,"R"),uT=gl.getUniformLocation(pr,"T"),uM=gl.getUniformLocation(pr,"M"),uS=gl.getUniformLocation(pr,"S"),uC=gl.getUniformLocation(pr,"C"),uX=gl.getUniformLocation(pr,"X");
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w=0,h=0,raf=0,running=false,t0=performance.now(),acc=8;
+  const size=()=>{const dpr=Math.min(devicePixelRatio||1,innerWidth<760?1.25:1.5);const r=cv.getBoundingClientRect();
+    w=Math.max(1,Math.round(r.width*dpr));h=Math.max(1,Math.round(r.height*dpr));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h;gl.viewport(0,0,w,h)}};
+  const draw=()=>{size();gl.uniform2f(uR,w,h);gl.uniform1f(uT,acc);gl.uniform1f(uM,0.);const cw=cv.clientWidth||1,ch=cv.clientHeight||1,one=innerWidth>900;gl.uniform1f(uS,Math.min(1,900/ch));gl.uniform1f(uC,one?.2:.66);gl.uniform1f(uX,Math.max(1.1,2.6*cw/1440));gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,3)};
+  const loop=now=>{acc+=Math.min(.05,(now-t0)/1000);t0=now;draw();raf=requestAnimationFrame(loop)};
+  const start=()=>{if(running||reduce)return;running=true;t0=performance.now();raf=requestAnimationFrame(loop)};
+  const stop=()=>{running=false;cancelAnimationFrame(raf)};
+  draw(); requestAnimationFrame(()=>cv.classList.add("on"));
+  if("IntersectionObserver" in window){new IntersectionObserver(es=>es[0].isIntersecting&&!document.hidden?start():stop(),{rootMargin:"100px 0px"}).observe(sec)}else start();
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else{const r=sec.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight)start()}});
+  addEventListener("resize",()=>{if(!running)draw()});
 })();
 </script>
 
