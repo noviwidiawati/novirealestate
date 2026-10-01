@@ -315,6 +315,61 @@ section{padding-block:clamp(64px,9vw,112px)}
   .lst-btn svg{width:18px;height:18px}
   .lst-btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 }
+/* Listings: coverflow carousel */
+#listings{overflow-x:clip}
+.cf{position:relative;margin-top:clamp(28px,4vw,48px);outline:none;--cw:min(560px,46vw);--ch:calc(var(--cw) * .75)}
+.cf:focus-visible .cf-stage{outline:2px solid var(--brass);outline-offset:12px;border-radius:8px}
+.cf-stage{position:relative;height:calc(var(--ch) + 24px);perspective:1200px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.cf-stage.dragging{cursor:grabbing}
+.cf-track{position:absolute;inset:0;pointer-events:none;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.cf-card{position:absolute;left:50%;top:12px;width:var(--cw);height:var(--ch);margin-left:calc(var(--cw) / -2);border-radius:16px;overflow:hidden;
+  background:linear-gradient(150deg,var(--sunk),var(--brass-soft));border:1px solid rgba(20,22,20,.08);
+  box-shadow:0 30px 50px -28px rgba(10,14,12,.55),0 12px 24px -16px rgba(10,14,12,.35);
+  transform-style:preserve-3d;will-change:transform;text-decoration:none;color:inherit;
+  transition:transform .6s cubic-bezier(.22,1.12,.36,1),opacity .45s ease,filter .45s ease;-webkit-tap-highlight-color:transparent}
+.cf-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease,transform 1.2s ease;pointer-events:none}
+.cf-card img.show{opacity:1}
+.cf-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,12,0) 55%,rgba(10,14,12,.45));opacity:.9;transition:opacity .45s ease;pointer-events:none}
+.cf-card:not(.is-active){filter:saturate(.85) brightness(.82)}
+.cf-card.is-active{filter:none}
+.cf-card.is-active:hover img.show{transform:scale(1.03)}
+.cf-card .badge{position:absolute;z-index:2;left:14px;top:14px}
+.cf-card .cf-open{position:absolute;z-index:2;right:14px;bottom:14px;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;
+  background:rgba(14,18,16,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#F4EFE6;font:500 .7rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+  opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
+.cf-card .cf-dots{position:absolute;z-index:2;left:14px;bottom:16px;display:flex;gap:6px;opacity:0;transition:opacity .35s ease}
+.cf-card .cf-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.45)}.cf-card .cf-dots i.on{background:#fff}
+.cf-card.is-active .cf-open,.cf-card.is-active .cf-dots{opacity:1;transform:none}
+.cf-info{max-width:760px;margin:clamp(22px,3vw,34px) auto 0;text-align:center;display:grid;gap:10px;justify-items:center;min-height:9.5em}
+.cf-info .loc{display:block}
+.cf-info h3{font-size:clamp(1.3rem,2.2vw,1.7rem);line-height:1.2;text-wrap:balance}
+.cf-info .price{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 12px}
+.cf-info .price small{display:inline;margin:0}
+.cf-info .specs{justify-content:center;border-top:1px solid var(--line);padding-top:12px}
+.cf-info>*{transition:opacity .35s ease,transform .45s cubic-bezier(.22,1,.36,1)}
+.cf-info.swap>*{opacity:0;transform:translateY(8px)}
+.cf-nav{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2vw,22px);margin-top:clamp(18px,2.4vw,26px)}
+.cf-btn{position:relative;display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border:0;border-radius:999px;cursor:pointer;
+  background:linear-gradient(180deg,#1f2421 0%,#0b0e0c 100%);color:#EADDBF;font:600 .86rem/1 var(--body);
+  box-shadow:0 0 0 1px rgba(0,0,0,.25),0 10px 18px -10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07);transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.cf-btn svg{width:16px;height:16px}
+@media (hover:hover){.cf-btn:hover{transform:translateY(-2px)}}
+.cf-btn.is-pressed{transform:translateY(1px) scale(.97)}
+.cf-btn:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.cf-count{min-width:64px;text-align:center;font:500 .8rem/1 var(--mono);letter-spacing:.12em;color:var(--muted);font-variant-numeric:tabular-nums}
+.cf-count b{color:var(--ink);font-weight:600}
+.cf-progress{width:min(220px,50%);height:2px;margin:14px auto 0;background:var(--line);border-radius:2px;overflow:hidden}
+.cf-progress i{display:block;height:100%;width:0;background:var(--brass)}
+.cf-progress i.run{animation:cfProg var(--cf-delay,5s) linear forwards}
+.cf.paused .cf-progress i.run{animation-play-state:paused}
+@keyframes cfProg{to{width:100%}}
+@media (max-width:760px){
+  .cf{--cw:78vw}
+  .cf-btn{padding:0 16px}.cf-btn span{display:none}.cf-btn{width:46px;justify-content:center;padding:0}
+  .cf-card{border-radius:12px}
+  .cf-info{min-height:11em}
+}
+@media (prefers-reduced-motion: reduce){.cf-card,.cf-track,.cf-info>*{transition:opacity .2s ease!important}.cf-progress{display:none}}
 .card{display:grid;grid-template-rows:auto 1fr;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;text-decoration:none;transition:border-color .2s ease}
 .card:hover{border-color:var(--brass)}
 .ph{position:relative;aspect-ratio:4/3;max-width:100%;background:linear-gradient(150deg,var(--sunk),var(--brass-soft));overflow:hidden}
@@ -736,12 +791,15 @@ footer p{max-width:72ch}
         </div>
         <p class="lede" style="max-width:40ch">Prices in IDR as listed. Ask me for the full pack: floor plans, lease copy and rental projections.</p>
       </div>
-      <div class="grid" id="grid"></div>
-      <div class="lst-nav" aria-label="Listing carousel controls">
-        <button class="lst-btn" id="lstPrev" type="button" aria-label="Previous listing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
-        <div class="lst-bar" aria-hidden="true"><i id="lstBar"></i></div>
-        <span class="lst-count" id="lstCount" aria-live="polite">1 / 6</span>
-        <button class="lst-btn" id="lstNext" type="button" aria-label="Next listing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Featured villas" tabindex="0">
+        <div class="cf-stage" id="cfStage"><div class="cf-track" id="cfTrack"></div></div>
+        <div class="cf-info" id="cfInfo" aria-live="polite"></div>
+        <div class="cf-nav">
+          <button class="cf-btn" id="cfPrev" type="button" aria-label="Previous listing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span>Prev</span></button>
+          <span class="cf-count" id="cfCount"><b>1</b> / 6</span>
+          <button class="cf-btn" id="cfNext" type="button" aria-label="Next listing"><span>Next</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="cf-progress" aria-hidden="true"><i id="cfProg"></i></div>
       </div>
       <p class="list-note">*Developer-provided estimates, not guaranteed returns. See <a href="#numbers">return estimates</a> for context.</p>
       <div class="more"><a class="btn btn-ghost" href="https://canggu.raywhite.co.id/agent/29348/noviwidiawati?default_lang=en&amp;page=1" target="_blank" rel="noopener">See all my listings on Ray White →</a></div>
@@ -1107,21 +1165,101 @@ const LISTINGS = [
   {id:"554110", area:"Uluwatu", title:"Modern Tropical 2 BR Private Pool Villa", price:"IDR 4,182,500,000", note:"Developer estimate: 13–17%*", bed:2, bath:2, land:"105 m²", bld:"108 m²", lease:"30 + 30 yr", badge:"Entry price", photos:3, url:RW+"554110/leasehold-modern-tropical-2-br-private-pool-villa-in-uluwatu-bali"}
 ];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-document.getElementById("grid").innerHTML = LISTINGS.map(l => `
-  <a class="card" href="${l.url}" target="_blank" rel="noopener">
-    <div class="ph" data-slides>
+// ---- Listings: coverflow carousel (vanilla port of CoverflowCarousel)
+(function(){
+  const root=document.getElementById("cf"); if(!root) return;
+  const track=document.getElementById("cfTrack"), stage=document.getElementById("cfStage"), info=document.getElementById("cfInfo");
+  const prev=document.getElementById("cfPrev"), next=document.getElementById("cfNext"), count=document.getElementById("cfCount"), prog=document.getElementById("cfProg");
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const N=LISTINGS.length, LOOP=true, AUTOPLAY=!reduce, DELAY=5000;
+  root.style.setProperty("--cf-delay",DELAY+"ms");
+  track.innerHTML=LISTINGS.map((l,i)=>`
+    <a class="cf-card" href="${l.url}" target="_blank" rel="noopener" data-i="${i}" aria-label="${esc(l.title)}, ${esc(l.area)}, ${esc(l.price)}">
       <span class="badge">${esc(l.badge)}</span>
-      <span class="count">${l.photos} photos</span>
-      ${Array.from({length:l.photos},(_,k)=>`<img src="images/listing-${l.id}-${k+1}.jpg" alt="${esc(l.title)}, ${esc(l.area)}, photo ${k+1}"${k?' loading="lazy"':''} class="${k?'':'show'}">`).join("")}
-      <span class="dots">${Array.from({length:l.photos},(_,k)=>`<i class="${k?'':'on'}"></i>`).join("")}</span>
-    </div>
-    <div class="body">
-      <span class="loc">${esc(l.area)} · Leasehold</span>
+      ${Array.from({length:l.photos},(_,k)=>`<img src="images/listing-${l.id}-${k+1}.jpg" alt="${esc(l.title)}, ${esc(l.area)}, photo ${k+1}" draggable="false"${k?' loading="lazy"':''} class="${k?'':'show'}">`).join("")}
+      <span class="cf-dots" aria-hidden="true">${Array.from({length:l.photos},(_,k)=>`<i class="${k?'':'on'}"></i>`).join("")}</span>
+      <span class="cf-open">View listing →</span>
+    </a>`).join("");
+  const cards=[...track.children];
+  let active=0, paused=false, inView=false, timer=null, photoT=null;
+
+  const cfg=()=>{const w=cards[0].offsetWidth, m=innerWidth<=760;
+    return m?{spacing:w*.62,rotation:32,depth:110,step:.12,max:1}:{spacing:w*.6,rotation:42,depth:180,step:.15,max:2}};
+  const offsetOf=i=>{let o=i-active; if(LOOP){if(o>N/2)o-=N; if(o<-N/2)o+=N} return o};
+
+  function layout(){
+    const c=cfg();
+    cards.forEach((el,i)=>{
+      const o=offsetOf(i), a=Math.abs(o), vis=a<=c.max, act=o===0;
+      if(reduce){el.style.transform=`translateX(${o*c.spacing}px)`;el.style.opacity=act?1:0}
+      else{
+        const sc=Math.max(1-a*c.step,.4);
+        el.style.transform=`translateX(${o*c.spacing}px) translateZ(${-a*c.depth}px) rotateY(${-o*c.rotation}deg) scale(${sc})`;
+        el.style.opacity=vis?1:0;
+      }
+      el.style.zIndex=N-a; el.style.pointerEvents=vis?"auto":"none";
+      el.classList.toggle("is-active",act);
+      el.setAttribute("aria-hidden",act?"false":"true"); el.tabIndex=act?0:-1;
+    });
+  }
+  function renderInfo(){
+    const l=LISTINGS[active];
+    const html=`<span class="loc">${esc(l.area)} · Leasehold</span>
       <h3>${esc(l.title)}</h3>
-      <div class="price">${esc(l.price)}${l.note ? `<small>${esc(l.note)}</small>` : ""}</div>
-      <div class="specs"><span>${l.bed} bed</span><span>${l.bath} bath</span><span>Land ${esc(l.land)}</span><span>Build ${esc(l.bld)}</span><span>${esc(l.lease)}</span></div>
-    </div>
-  </a>`).join("");
+      <div class="price">${esc(l.price)}${l.note?`<small>${esc(l.note)}</small>`:""}</div>
+      <div class="specs"><span>${l.bed} bed</span><span>${l.bath} bath</span><span>Land ${esc(l.land)}</span><span>Build ${esc(l.bld)}</span><span>${esc(l.lease)}</span></div>`;
+    if(reduce||!info.innerHTML){info.innerHTML=html;return}
+    info.classList.add("swap"); setTimeout(()=>{info.innerHTML=html;requestAnimationFrame(()=>info.classList.remove("swap"))},180);
+  }
+  function restartProgress(){prog.classList.remove("run");void prog.offsetWidth;if(AUTOPLAY&&!paused&&inView)prog.classList.add("run")}
+  function schedule(){clearTimeout(timer); if(!AUTOPLAY||paused||!inView||document.hidden) return; timer=setTimeout(()=>goTo(active+1),DELAY)}
+  function stopPhotos(){clearInterval(photoT);photoT=null}
+  function setPhoto(card,n){const imgs=[...card.querySelectorAll("img")],dots=[...card.querySelectorAll(".cf-dots i")];imgs.forEach((im,k)=>im.classList.toggle("show",k===n));dots.forEach((d,k)=>d.classList.toggle("on",k===n))}
+  function goTo(n){
+    const prevActive=active;
+    active=LOOP?((n%N)+N)%N:Math.min(Math.max(n,0),N-1);
+    if(active!==prevActive){stopPhotos();setPhoto(cards[prevActive],0)}
+    layout(); renderInfo();
+    count.innerHTML=`<b>${active+1}</b> / ${N}`;
+    if(!LOOP){prev.disabled=active===0;next.disabled=active===N-1}
+    restartProgress(); schedule();
+  }
+  const setPaused=v=>{paused=v;root.classList.toggle("paused",v);if(v){clearTimeout(timer)}else{restartProgress();schedule()}};
+
+  prev.addEventListener("click",()=>goTo(active-1));
+  next.addEventListener("click",()=>goTo(active+1));
+  root.addEventListener("keydown",e=>{if(e.key==="ArrowRight"){e.preventDefault();goTo(active+1)}else if(e.key==="ArrowLeft"){e.preventDefault();goTo(active-1)}});
+  root.addEventListener("mouseenter",()=>setPaused(true)); root.addEventListener("mouseleave",()=>setPaused(false));
+  root.addEventListener("focusin",()=>setPaused(true)); root.addEventListener("focusout",e=>{if(!root.contains(e.relatedTarget))setPaused(false)});
+  document.addEventListener("visibilitychange",()=>{document.hidden?clearTimeout(timer):(restartProgress(),schedule())});
+  if("IntersectionObserver" in window){new IntersectionObserver(es=>{inView=es[0].isIntersecting;restartProgress();schedule()},{threshold:.35}).observe(stage)}else{inView=true}
+
+  // Side card click = bring it to centre; centre card click = open listing
+  let dragged=false;
+  cards.forEach((el,i)=>el.addEventListener("click",e=>{if(dragged){e.preventDefault();return} if(i!==active){e.preventDefault();goTo(i)}}));
+  // Centre card: cycle its photos while hovered
+  cards.forEach((el,i)=>{
+    el.addEventListener("mouseenter",()=>{if(i!==active||reduce||photoT)return;let k=0;const n=el.querySelectorAll("img").length;photoT=setInterval(()=>{k=(k+1)%n;setPhoto(el,k)},1600)});
+    el.addEventListener("mouseleave",()=>{stopPhotos();setPhoto(el,0)});
+  });
+
+  // Swipe / drag (distance 80px or fast flick)
+  let sx=0,sy=0,st=0,down=false,horiz=null;
+  stage.addEventListener("pointerdown",e=>{if(e.button!==0)return;down=true;dragged=false;horiz=null;sx=e.clientX;sy=e.clientY;st=performance.now()});
+  stage.addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(horiz===null&&(Math.abs(dx)>6||Math.abs(dy)>6)){horiz=Math.abs(dx)>Math.abs(dy);if(horiz){stage.setPointerCapture(e.pointerId);stage.classList.add("dragging");setPaused(true)}}
+    if(horiz){dragged=Math.abs(dx)>8;track.style.transform=`translateX(${dx*.12}px)`}});
+  const end=e=>{if(!down)return;down=false;stage.classList.remove("dragging");track.style.transform="";
+    if(horiz){const dx=e.clientX-sx,v=dx/Math.max(1,performance.now()-st)*1000;
+      if(dx<-80||v<-500)goTo(active+1);else if(dx>80||v>500)goTo(active-1);
+      if(e.pointerType!=="mouse")setTimeout(()=>setPaused(false),4000)}
+    setTimeout(()=>{dragged=false},0)};
+  stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);
+  stage.addEventListener("dragstart",e=>e.preventDefault());
+
+  let rz;addEventListener("resize",()=>{cancelAnimationFrame(rz);rz=requestAnimationFrame(layout)});
+  goTo(0);
+})();
 
 // ---- "Before you buy": flying headline + 3D tiles
 document.documentElement.classList.add("js");
@@ -1164,21 +1302,6 @@ document.documentElement.classList.add("js");
   if(rows[0]) rows[0].classList.add("sel");
 })();
 
-// ---- Listing photos: cycle on hover (desktop) or when in view (touch)
-(function(){
-  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.querySelectorAll("[data-slides]").forEach(ph=>{
-    const imgs=[...ph.querySelectorAll("img")], dots=[...ph.querySelectorAll(".dots i")]; let i=0, t=null;
-    const go=n=>{imgs[i].classList.remove("show");dots[i].classList.remove("on");i=(n+imgs.length)%imgs.length;imgs[i].classList.add("show");dots[i].classList.add("on")};
-    const start=()=>{if(!t&&!reduce){go(i+1);t=setInterval(()=>go(i+1),1800)}};
-    const stop=()=>{clearInterval(t);t=null};
-    const card=ph.closest(".card");
-    card.addEventListener("mouseenter",start);card.addEventListener("mouseleave",()=>{stop();go(0)});
-    card.addEventListener("focus",start);card.addEventListener("blur",()=>{stop();go(0)});
-    if(matchMedia("(hover: none)").matches){new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?start():stop()),{threshold:.6}).observe(ph)}
-  });
-})();
-
 // ---- Hero: entrance, parallax, card tilt, magnetic buttons
 (function(){
   const hero=document.getElementById("hero"); if(!hero) return;
@@ -1202,21 +1325,6 @@ document.documentElement.classList.add("js");
     b.addEventListener("pointermove",e=>{const r=b.getBoundingClientRect();b.style.setProperty("--mx",((e.clientX-r.left-r.width/2)/r.width*5).toFixed(2)+"px");b.style.setProperty("--my",((e.clientY-r.top-r.height/2)/r.height*4).toFixed(2)+"px")});
     b.addEventListener("pointerleave",()=>{b.style.setProperty("--mx","0px");b.style.setProperty("--my","0px")});
   });
-})();
-
-// ---- Listings: swipe carousel on phones
-(function(){
-  const g=document.getElementById("grid"),prev=document.getElementById("lstPrev"),next=document.getElementById("lstNext"),cnt=document.getElementById("lstCount"),bar=document.getElementById("lstBar");
-  if(!g||!prev) return;
-  const cards=()=>[...g.querySelectorAll(".card")];
-  const idx=()=>{const c=cards();if(!c.length)return 0;const x=g.scrollLeft;let best=0,d=1e9;c.forEach((el,i)=>{const dd=Math.abs(el.offsetLeft-g.offsetLeft-x-parseFloat(getComputedStyle(g).paddingLeft));if(dd<d){d=dd;best=i}});
-    if(g.scrollLeft+g.clientWidth>=g.scrollWidth-4)best=c.length-1;return best};
-  const upd=()=>{const c=cards(),i=idx(),n=c.length||1;cnt.textContent=(i+1)+" / "+n;bar.style.width=(100/n)+"%";bar.style.transform="translateX("+(i*100)+"%)";prev.disabled=i<=0;next.disabled=i>=n-1};
-  const go=d=>{const c=cards(),i=Math.max(0,Math.min(c.length-1,idx()+d));const pad=parseFloat(getComputedStyle(g).paddingLeft);
-    g.scrollTo({left:c[i].offsetLeft-g.offsetLeft-pad,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})};
-  prev.addEventListener("click",()=>go(-1));next.addEventListener("click",()=>go(1));
-  let t;g.addEventListener("scroll",()=>{cancelAnimationFrame(t);t=requestAnimationFrame(upd)},{passive:true});
-  addEventListener("resize",upd);upd();
 })();
 
 // ---- Hero video: always playing (muted, looped); resume if the browser pauses it
@@ -2034,7 +2142,7 @@ void main() {
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   const IDLE=reduce?0:.6, HOVER=reduce?0:1, BURST=reduce?0:2.4;
   // [selector of the clickable element, selector of the visible face inside it (or "" = itself)]
-  const TARGETS=[[".hb",".hb-face"],[".hb-wa",""],[".more .btn",""],[".rt-btn",""],[".lf-cta",".face"],[".mnav .btn-wa",""],[".float-wa",""],[".cc-launch",""]];
+  const TARGETS=[[".hb",".hb-face"],[".hb-wa",""],[".more .btn",""],[".rt-btn",""],[".lf-cta",".face"],[".mnav .btn-wa",""],[".float-wa",""],[".cc-launch",""],[".cf-btn",""]];
   TARGETS.forEach(([sel,faceSel])=>document.querySelectorAll(sel).forEach(el=>{
     const host=faceSel?el.querySelector(faceSel):el; if(!host||host.querySelector(".lm-ring")) return;
     const ring=document.createElement("span"); ring.className="lm-ring"; ring.setAttribute("aria-hidden","true");
