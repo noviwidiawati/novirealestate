@@ -1458,4 +1458,12 @@ const NOVI_WA = "6287781033323";
 <!-- ===== /CONCIERGE ===== -->
 
 </body>
+  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
+<script>
+  const { animate, inView } = Motion;
+  animate("h1", { opacity: [0, 1], y: [30, 0] }, { duration: 0.8 });
+  inView("section", (el) => {
+    animate(el, { opacity: [0, 1], y: [40, 0] }, { duration: 0.7 });
+  });
+</script>
 </html>
