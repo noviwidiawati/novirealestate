@@ -1,0 +1,71 @@
+# Listing manager for noviwidiawati.com (Decap CMS)
+backend:
+  name: github
+  repo: noviwidiawati/novirealestate
+  branch: main
+  base_url: https://api.netlify.com
+  site_domain: noviwidiawati.com
+  commit_messages:
+    update: "Update listings via admin"
+    uploadMedia: "Upload listing photo {{path}}"
+
+# Photos uploaded in the admin are stored here in the repo…
+media_folder: "novirealestate 13/images/uploads"
+# …and referenced like this on the website
+public_folder: "images/uploads"
+
+site_url: https://noviwidiawati.com
+display_url: https://noviwidiawati.com
+logo_url: https://noviwidiawati.com/images/novi-portrait.jpg
+
+collections:
+  - name: listings
+    label: "Listings"
+    editor:
+      preview: false
+    files:
+      - name: listings
+        label: "All listings"
+        file: "novirealestate 13/data/listings.json"
+        format: json
+        fields:
+          - label: "Listings"
+            name: listings
+            widget: list
+            label_singular: "listing"
+            summary: "{{fields.title}} · {{fields.area}} · {{fields.price}}"
+            add_to_top: true
+            hint: "Drag to reorder. The order here is the order on the website. The first listings marked 'Show on homepage' appear in the homepage carousel."
+            fields:
+              - {label: "Title", name: title, widget: string, hint: "e.g. Luxury 3 BR Pool Villa in Berawa"}
+              - label: "Page link (slug)"
+                name: slug
+                widget: string
+                hint: "Lowercase words joined by dashes, unique for each listing, e.g. villa-sunset-berawa. Do not change it after sharing the link."
+                pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Use lowercase letters, numbers and dashes only (no spaces)."]
+              - {label: "Show on homepage", name: featured, widget: boolean, default: true}
+              - {label: "Area", name: area, widget: string, hint: "e.g. Canggu, Pererenan, Uluwatu"}
+              - {label: "Property type", name: type, widget: select, options: ["Villa", "Apartment", "Land", "House", "Commercial"], default: "Villa"}
+              - {label: "Ownership", name: tenure, widget: select, options: ["Leasehold", "Freehold", "Freehold (HGB)", "Freehold (SHM)"], default: "Leasehold"}
+              - {label: "Status", name: status, widget: select, required: false, options: ["Completed", "Under construction", "Off-plan", "Sold", "Under offer"]}
+              - {label: "Price", name: price, widget: string, hint: "e.g. IDR 5,250,000,000"}
+              - {label: "Price note", name: price_note, widget: string, required: false, hint: "e.g. Offers over · from USD 320,000"}
+              - {label: "Bedrooms", name: bed, widget: number, value_type: int, min: 0, required: false}
+              - {label: "Bathrooms", name: bath, widget: number, value_type: int, min: 0, required: false}
+              - {label: "Land size", name: land, widget: string, required: false, hint: "e.g. 300 m² (leave empty for apartments)"}
+              - {label: "Building size", name: building, widget: string, required: false, hint: "e.g. 220 m²"}
+              - {label: "Lease term", name: lease, widget: string, required: false, hint: "e.g. 27 years + 25 extension"}
+              - {label: "Badge on photo", name: badge, widget: string, required: false, hint: "Short label, e.g. Rental-ready, Ocean view, New"}
+              - {label: "Short summary", name: summary, widget: text, required: false, hint: "One or two sentences shown under the title."}
+              - {label: "Full description", name: description, widget: text, required: false, hint: "Leave an empty line between paragraphs. Start a line with '- ' to make a bullet point."}
+              - {label: "Highlights", name: highlights, widget: list, required: false, field: {label: "Highlight", name: highlight, widget: string}}
+              - {label: "Rental / yield note", name: yield_note, widget: text, required: false, hint: "Only developer or vendor figures, worded as estimates — never guaranteed returns."}
+              - label: "Photos"
+                name: photos
+                widget: list
+                summary: "{{fields.image}}"
+                hint: "The first photo is the cover. Landscape photos, around 1600 px wide, look best."
+                fields:
+                  - {label: "Photo", name: image, widget: image, choose_url: false}
+                  - {label: "Photo description", name: alt, widget: string, required: false, hint: "e.g. Pool and garden at sunset"}
+              - {label: "Listed with (agency)", name: agency, widget: string, required: false, default: "Ray White Canggu"}
