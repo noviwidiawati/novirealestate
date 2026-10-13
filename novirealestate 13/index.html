@@ -715,10 +715,61 @@ html.intro-on body{overflow:hidden}
 
 /* listing typography: Playfair + Manrope */
 .cf-info h3{font-family:"Playfair Display",Georgia,serif;font-weight:600;letter-spacing:-.005em}.cf-info .price{font:700 1.18rem/1.2 "Manrope",var(--body);color:var(--brass);letter-spacing:.005em;font-variant-numeric:tabular-nums}.cf-info .price small{font-family:var(--body);font-weight:500}
+
+/* currency toggle */
+.curbox{display:grid;gap:8px;justify-items:start}
+.curt{display:inline-flex;padding:3px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.curt button{font:600 .74rem/1 "Manrope",var(--body);letter-spacing:.08em;padding:8px 13px;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.curt button:hover{color:var(--ink)}
+.curt button[aria-pressed="true"]{background:var(--brass);color:var(--surface)}
+.curt button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.fxn{margin:0;font:400 .74rem/1.45 var(--body);color:var(--muted);max-width:44ch}
+.pxs{display:block;font:500 .78rem/1.35 var(--body);color:var(--muted);margin-top:3px;letter-spacing:0}
+.cur-col{display:grid;gap:14px;justify-items:start}.cf-info .price .pxs{flex-basis:100%;text-align:center;margin-top:0}
 </style>
 </head>
 <body>
 
+<script>
+window.NWCUR=(function(){
+  var K="nw_cur",KF="nw_fx",CS=["IDR","USD","AUD"],cur="IDR",fx={IDR:17920,AUD:1.434,t:0,date:""};
+  try{var s=localStorage.getItem(K);if(CS.indexOf(s)>-1)cur=s}catch(e){}
+  try{var c=JSON.parse(localStorage.getItem(KF)||"null");if(c&&c.IDR&&c.AUD)fx=c}catch(e){}
+  var fmt=function(n){return Math.round(n).toLocaleString("en-US")};
+  var k1=function(n){return Math.round(n/1000)*1000};
+  var num=function(s){var d=String(s||"").replace(/[^\d]/g,"");return d?+d:0};
+  function calc(el){
+    var idr=el.getAttribute("data-idr")||"",usd=+el.getAttribute("data-usd")||0,base=usd||(num(idr)?num(idr)/fx.IDR:0);
+    if(cur==="IDR"||!base)return{m:idr,s:usd?"Developer price: USD "+fmt(usd):""};
+    if(cur==="USD")return{m:usd?"USD "+fmt(usd):"≈ USD "+fmt(k1(base)),s:"Official price: "+idr};
+    return{m:"≈ AUD "+fmt(k1(base*fx.AUD)),s:"Official price: "+idr};
+  }
+  function note(){return cur==="IDR"?"":(cur==="USD"?"USD shown is the developer's price where given, otherwise an estimate. ":"AUD is an estimate. ")+"Rate: 1 USD = IDR "+fmt(fx.IDR)+" · AUD "+fx.AUD.toFixed(3)+(fx.date?" ("+fx.date+")":"")+". Official prices are in IDR."}
+  function apply(){
+    var a=document.querySelectorAll(".px"),i,r;
+    for(i=0;i<a.length;i++){r=calc(a[i]);if(a[i].textContent!==r.m)a[i].textContent=r.m}
+    a=document.querySelectorAll(".pxs");
+    for(i=0;i<a.length;i++){r=calc(a[i]);if(a[i].textContent!==r.s)a[i].textContent=r.s;a[i].hidden=!r.s}
+    a=document.querySelectorAll(".curt button");
+    for(i=0;i<a.length;i++)a[i].setAttribute("aria-pressed",a[i].getAttribute("data-c")===cur?"true":"false");
+    a=document.querySelectorAll(".fxn");
+    for(i=0;i<a.length;i++){var t=note();if(a[i].textContent!==t)a[i].textContent=t;a[i].hidden=!t}
+  }
+  function html(noNote){return '<div class="curbox"><div class="curt" role="group" aria-label="Show prices in">'+CS.map(function(c){return '<button type="button" data-c="'+c+'">'+c+'</button>'}).join("")+'</div>'+(noNote?'':'<p class="fxn" hidden></p>')+'</div>'}
+  function set(c){if(CS.indexOf(c)<0)return;cur=c;try{localStorage.setItem(K,c)}catch(e){}apply()}
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".curt button");if(b){e.preventDefault();set(b.getAttribute("data-c"))}});
+  var q=0;new MutationObserver(function(){if(q)return;q=requestAnimationFrame(function(){q=0;apply()})}).observe(document.documentElement,{childList:true,subtree:true});
+  document.addEventListener("DOMContentLoaded",apply);
+  function save(o){fx=o;try{localStorage.setItem(KF,JSON.stringify(o))}catch(e){}apply()}
+  if(!fx.t||Date.now()-fx.t>6*36e5){
+    fetch("https://api.frankfurter.dev/v1/latest?base=USD&symbols=IDR,AUD").then(function(r){if(!r.ok)throw 0;return r.json()})
+    .then(function(d){save({IDR:d.rates.IDR,AUD:d.rates.AUD,t:Date.now(),date:d.date})})
+    .catch(function(){return fetch("https://open.er-api.com/v6/latest/USD").then(function(r){return r.json()}).then(function(d){if(d.rates&&d.rates.IDR)save({IDR:d.rates.IDR,AUD:d.rates.AUD,t:Date.now(),date:new Date(d.time_last_update_unix*1000).toISOString().slice(0,10)})})})
+    .catch(function(){});
+  }
+  return {html:html,apply:apply,set:set};
+})();
+</script>
 <div id="intro3d" aria-hidden="true"><canvas></canvas><div class="it"><b>NOVI WIDIYAWATI</b><small>Bali Property &amp; Marketing Strategist</small></div><button class="skip" type="button" tabindex="-1">Skip</button></div>
 <script>
 // ---- Intro: 3D gold NW logo (custom WebGL, once per session)
@@ -909,7 +960,7 @@ html.intro-on body{overflow:hidden}
           <span class="eyebrow">Featured listings</span>
           <h2>Villas I’m <em>representing</em> now.</h2>
         </div>
-        <p class="lede" style="max-width:40ch">Prices in IDR as listed. Ask me for the full pack: floor plans, lease copy and rental projections.</p>
+        <div class="cur-col"><p class="lede" style="max-width:40ch">Official prices in IDR. Switch to USD or AUD for a guide at today’s rate, or ask me for the full pack: floor plans, lease copy and rental projections.</p><div class="cur-slot"><script>document.currentScript.parentNode.innerHTML=NWCUR.html()</script></div></div>
       </div>
       <div class="cf" id="cf" role="region" aria-roledescription="carousel" aria-label="Featured villas" tabindex="0">
         <div class="cf-stage" id="cfStage"><div class="cf-track" id="cfTrack"></div></div>
@@ -1315,7 +1366,7 @@ loadListings().then(LISTINGS=>{ if(!LISTINGS.length) return;
     const l=LISTINGS[active];
     const html=`<span class="loc">${esc(l.area)} · ${esc(l.tenure||"Leasehold")}</span>
       <h3>${esc(l.title)}</h3>
-      <div class="price">${esc(l.price)}${l.note?`<small>${esc(l.note)}</small>`:""}</div>
+      <div class="price"><span class="px" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}">${esc(l.price)}</span>${l.note?`<small>${esc(l.note)}</small>`:""}<small class="pxs" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}" hidden></small></div>
       <div class="specs"><span>${l.bed} bed</span><span>${l.bath} bath</span>${l.land?`<span>Land ${esc(l.land)}</span>`:`<span>Apartment</span>`}<span>Build ${esc(l.bld)}</span><span>${esc(l.lease)}</span></div>`;
     if(reduce||!info.innerHTML){info.innerHTML=html;return}
     info.classList.add("swap"); setTimeout(()=>{info.innerHTML=html;requestAnimationFrame(()=>info.classList.remove("swap"))},180);

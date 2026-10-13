@@ -49,7 +49,8 @@ collections:
               - {label: "Ownership", name: tenure, widget: select, options: ["Leasehold", "Freehold", "Freehold (HGB)", "Freehold (SHM)"], default: "Leasehold"}
               - {label: "Status", name: status, widget: select, required: false, options: ["Completed", "Under construction", "Off-plan", "Sold", "Under offer"]}
               - {label: "Price", name: price, widget: string, hint: "e.g. IDR 5,250,000,000"}
-              - {label: "Price note", name: price_note, widget: string, required: false, hint: "e.g. Offers over · from USD 320,000"}
+              - {label: "Price (USD, from developer)", name: price_usd, widget: number, value_type: int, required: false, hint: "Numbers only, e.g. 415000. Leave empty if the developer gives no USD price - the site will then estimate USD/AUD from the IDR price at today's rate."}
+              - {label: "Price note", name: price_note, widget: string, required: false, hint: "e.g. Offers over (put the USD price in the field above, not here)"}
               - {label: "Bedrooms", name: bed, widget: number, value_type: int, min: 0, required: false}
               - {label: "Bathrooms", name: bath, widget: number, value_type: int, min: 0, required: false}
               - {label: "Land size", name: land, widget: string, required: false, hint: "e.g. 300 m² (leave empty for apartments)"}

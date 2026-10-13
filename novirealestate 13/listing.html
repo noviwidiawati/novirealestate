@@ -85,7 +85,58 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 
 /* listing typography: Playfair + Manrope */
 .head h1,.lcard h3{font-family:"Playfair Display",Georgia,serif;font-weight:600;letter-spacing:-.005em}.lcard .pr{font:700 1.08rem/1.2 "Manrope",var(--body);color:var(--brass);letter-spacing:.005em;font-variant-numeric:tabular-nums}.card .price{font:700 1.6rem/1.2 "Manrope",var(--body);letter-spacing:.005em}
+
+/* currency toggle */
+.curbox{display:grid;gap:8px;justify-items:start}
+.curt{display:inline-flex;padding:3px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.curt button{font:600 .74rem/1 "Manrope",var(--body);letter-spacing:.08em;padding:8px 13px;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.curt button:hover{color:var(--ink)}
+.curt button[aria-pressed="true"]{background:var(--brass);color:var(--surface)}
+.curt button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.fxn{margin:0;font:400 .74rem/1.45 var(--body);color:var(--muted);max-width:44ch}
+.pxs{display:block;font:500 .78rem/1.35 var(--body);color:var(--muted);margin-top:3px;letter-spacing:0}
+.card .curbox{margin-bottom:16px}.card .curt{background:rgba(255,255,255,.06);border-color:rgba(241,217,161,.28)}.card .curt button{color:rgba(243,242,238,.7)}.card .curt button:hover{color:#fff}.card .curt button[aria-pressed="true"]{background:#F1D9A1;color:#10201a}.card .fxn{color:rgba(243,242,238,.6);font-size:.72rem;margin-top:10px}.card .pxs{color:rgba(243,242,238,.75);font-size:.86rem;margin-top:6px}
 </style>
+<script>
+window.NWCUR=(function(){
+  var K="nw_cur",KF="nw_fx",CS=["IDR","USD","AUD"],cur="IDR",fx={IDR:17920,AUD:1.434,t:0,date:""};
+  try{var s=localStorage.getItem(K);if(CS.indexOf(s)>-1)cur=s}catch(e){}
+  try{var c=JSON.parse(localStorage.getItem(KF)||"null");if(c&&c.IDR&&c.AUD)fx=c}catch(e){}
+  var fmt=function(n){return Math.round(n).toLocaleString("en-US")};
+  var k1=function(n){return Math.round(n/1000)*1000};
+  var num=function(s){var d=String(s||"").replace(/[^\d]/g,"");return d?+d:0};
+  function calc(el){
+    var idr=el.getAttribute("data-idr")||"",usd=+el.getAttribute("data-usd")||0,base=usd||(num(idr)?num(idr)/fx.IDR:0);
+    if(cur==="IDR"||!base)return{m:idr,s:usd?"Developer price: USD "+fmt(usd):""};
+    if(cur==="USD")return{m:usd?"USD "+fmt(usd):"≈ USD "+fmt(k1(base)),s:"Official price: "+idr};
+    return{m:"≈ AUD "+fmt(k1(base*fx.AUD)),s:"Official price: "+idr};
+  }
+  function note(){return cur==="IDR"?"":(cur==="USD"?"USD shown is the developer's price where given, otherwise an estimate. ":"AUD is an estimate. ")+"Rate: 1 USD = IDR "+fmt(fx.IDR)+" · AUD "+fx.AUD.toFixed(3)+(fx.date?" ("+fx.date+")":"")+". Official prices are in IDR."}
+  function apply(){
+    var a=document.querySelectorAll(".px"),i,r;
+    for(i=0;i<a.length;i++){r=calc(a[i]);if(a[i].textContent!==r.m)a[i].textContent=r.m}
+    a=document.querySelectorAll(".pxs");
+    for(i=0;i<a.length;i++){r=calc(a[i]);if(a[i].textContent!==r.s)a[i].textContent=r.s;a[i].hidden=!r.s}
+    a=document.querySelectorAll(".curt button");
+    for(i=0;i<a.length;i++)a[i].setAttribute("aria-pressed",a[i].getAttribute("data-c")===cur?"true":"false");
+    a=document.querySelectorAll(".fxn");
+    for(i=0;i<a.length;i++){var t=note();if(a[i].textContent!==t)a[i].textContent=t;a[i].hidden=!t}
+  }
+  function html(noNote){return '<div class="curbox"><div class="curt" role="group" aria-label="Show prices in">'+CS.map(function(c){return '<button type="button" data-c="'+c+'">'+c+'</button>'}).join("")+'</div>'+(noNote?'':'<p class="fxn" hidden></p>')+'</div>'}
+  function set(c){if(CS.indexOf(c)<0)return;cur=c;try{localStorage.setItem(K,c)}catch(e){}apply()}
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".curt button");if(b){e.preventDefault();set(b.getAttribute("data-c"))}});
+  var q=0;new MutationObserver(function(){if(q)return;q=requestAnimationFrame(function(){q=0;apply()})}).observe(document.documentElement,{childList:true,subtree:true});
+  document.addEventListener("DOMContentLoaded",apply);
+  function save(o){fx=o;try{localStorage.setItem(KF,JSON.stringify(o))}catch(e){}apply()}
+  if(!fx.t||Date.now()-fx.t>6*36e5){
+    fetch("https://api.frankfurter.dev/v1/latest?base=USD&symbols=IDR,AUD").then(function(r){if(!r.ok)throw 0;return r.json()})
+    .then(function(d){save({IDR:d.rates.IDR,AUD:d.rates.AUD,t:Date.now(),date:d.date})})
+    .catch(function(){return fetch("https://open.er-api.com/v6/latest/USD").then(function(r){return r.json()}).then(function(d){if(d.rates&&d.rates.IDR)save({IDR:d.rates.IDR,AUD:d.rates.AUD,t:Date.now(),date:new Date(d.time_last_update_unix*1000).toISOString().slice(0,10)})})})
+    .catch(function(){});
+  }
+  return {html:html,apply:apply,set:set};
+})();
+</script>
 </head>
 <body>
 <header class="top"><div class="wrap"><a class="brand" href="./" aria-label="Novi Widiyawati – home"><svg class="brand-mark" viewBox="-1.020 -0.563 2.040 1.127" role="img" aria-hidden="true" focusable="false"><defs><linearGradient id="nwGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3DFA8"/><stop offset=".28" stop-color="#C9A36A"/><stop offset=".5" stop-color="#8E6A33"/><stop offset=".72" stop-color="#E4C98E"/><stop offset="1" stop-color="#A9823F"/></linearGradient></defs><path d="M-0.716,-0.445 L-0.716,0.438 L-0.574,0.438 L-0.574,0.470 L-0.876,0.470 L-0.876,0.438 L-0.749,0.438 L-0.749,-0.413 L-0.876,-0.413 L-0.876,-0.445Z M0.024,-0.445 L0.024,-0.413 L-0.105,-0.413 L-0.105,0.482 L-0.150,0.482 L-0.739,-0.445 L-0.541,-0.445 L-0.138,0.197 L-0.138,-0.413 L-0.275,-0.413 L-0.275,-0.445Z M0.168,0.543 L-0.133,-0.352 L-0.246,-0.352 L-0.246,-0.384 L0.701,-0.384 L0.701,-0.352 L0.392,-0.352 L0.622,0.340 L0.867,-0.352 L0.760,-0.352 L0.760,-0.384 L1.000,-0.384 L1.000,-0.352 L0.903,-0.352 L0.586,0.543 L0.536,0.543 L0.235,-0.352 L0.033,-0.352 L0.263,0.340 L0.382,0.005 L0.400,0.058 L0.226,0.543Z M0.482,-0.037 L0.454,-0.060 L0.564,-0.373 L0.598,-0.366Z" fill="url(#nwGold)"/><path d="M-1.000,-0.480 L-0.977,-0.491 L-0.955,-0.501 L-0.934,-0.510 L-0.913,-0.517 L-0.892,-0.524 L-0.871,-0.530 L-0.851,-0.535 L-0.831,-0.539 L-0.811,-0.541 L-0.791,-0.543 L-0.771,-0.543 L-0.752,-0.543 L-0.732,-0.541 L-0.713,-0.538 L-0.693,-0.534 L-0.674,-0.529 L-0.655,-0.523 L-0.637,-0.516 L-0.618,-0.507 L-0.600,-0.498 L-0.582,-0.488 L-0.565,-0.477 L-0.548,-0.465 L-0.531,-0.453 L-0.514,-0.440 L-0.498,-0.426 L-0.482,-0.411 L-0.466,-0.396 L-0.451,-0.380 L-0.435,-0.363 L-0.421,-0.347 L-0.406,-0.329 L-0.391,-0.311 L-0.377,-0.293 L-0.363,-0.275 L-0.349,-0.256 L-0.335,-0.236 L-0.322,-0.217 L-0.308,-0.197 L-0.294,-0.177 L-0.281,-0.157 L-0.268,-0.136 L-0.254,-0.116 L-0.241,-0.095 L-0.227,-0.074 L-0.213,-0.053 L-0.200,-0.032 L-0.186,-0.011 L-0.172,0.010 L-0.158,0.031 L-0.143,0.052 L-0.128,0.073 L-0.113,0.094 L-0.098,0.115 L-0.082,0.135 L-0.066,0.155 L-0.049,0.176 L-0.032,0.196 L-0.015,0.215 L0.004,0.234 L0.022,0.253 L0.042,0.272 L0.061,0.290 L0.082,0.308 L0.103,0.325 L0.126,0.341 L0.148,0.357 L0.172,0.372 L0.197,0.387 L0.222,0.399 L0.248,0.411 L0.276,0.422 L0.303,0.433 L0.332,0.443 L0.361,0.452 L0.391,0.460 L0.422,0.467 L0.453,0.474 L0.486,0.479 L0.519,0.484 L0.517,0.493 L0.484,0.489 L0.452,0.483 L0.420,0.477 L0.389,0.469 L0.358,0.461 L0.329,0.452 L0.300,0.442 L0.272,0.432 L0.245,0.420 L0.218,0.408 L0.192,0.396 L0.166,0.384 L0.141,0.371 L0.115,0.358 L0.091,0.344 L0.067,0.330 L0.043,0.316 L0.019,0.300 L-0.004,0.285 L-0.026,0.269 L-0.049,0.253 L-0.070,0.236 L-0.092,0.219 L-0.113,0.202 L-0.134,0.184 L-0.154,0.166 L-0.174,0.148 L-0.193,0.129 L-0.212,0.110 L-0.231,0.091 L-0.249,0.072 L-0.267,0.053 L-0.285,0.033 L-0.302,0.014 L-0.319,-0.005 L-0.335,-0.025 L-0.351,-0.044 L-0.367,-0.064 L-0.382,-0.083 L-0.398,-0.102 L-0.412,-0.121 L-0.427,-0.140 L-0.441,-0.159 L-0.455,-0.177 L-0.469,-0.196 L-0.482,-0.213 L-0.495,-0.231 L-0.508,-0.248 L-0.521,-0.265 L-0.533,-0.281 L-0.546,-0.297 L-0.558,-0.313 L-0.570,-0.328 L-0.582,-0.342 L-0.594,-0.356 L-0.606,-0.370 L-0.618,-0.383 L-0.630,-0.395 L-0.642,-0.407 L-0.655,-0.418 L-0.667,-0.429 L-0.680,-0.439 L-0.692,-0.449 L-0.706,-0.457 L-0.719,-0.466 L-0.733,-0.473 L-0.748,-0.480 L-0.763,-0.486 L-0.778,-0.491 L-0.794,-0.495 L-0.811,-0.498 L-0.829,-0.500 L-0.848,-0.501 L-0.867,-0.501 L-0.887,-0.500 L-0.907,-0.497 L-0.929,-0.493 L-0.951,-0.488 L-0.973,-0.480 L-0.996,-0.471Z" fill="url(#nwGold)" stroke="var(--bg)" stroke-width=".018" paint-order="stroke"/></svg></a>
@@ -105,7 +156,7 @@ const md=t=>{const out=[];let ul=null;String(t||"").split(/\n/).forEach(line=>{c
  out.forEach(b=>{if(Array.isArray(b)){flush();h+=`<ul>${b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`}else if(b==="")flush();else para.push(b)});flush();return h};
 const cardHTML=l=>{const p=(l.photos||[])[0];return `<a class="lcard" href="listing.html?id=${encodeURIComponent(l.slug)}">
  <div class="ph">${p?`<img src="${esc(img(p))}" alt="${esc(p.alt||l.title)}" loading="lazy">`:""}${l.badge?`<span class="badge">${esc(l.badge)}</span>`:""}</div>
- <div class="bd"><span class="loc">${esc(l.area)} · ${esc(l.tenure)}</span><h3>${esc(l.title)}</h3><div class="pr">${esc(l.price)}</div>
+ <div class="bd"><span class="loc">${esc(l.area)} · ${esc(l.tenure)}</span><h3>${esc(l.title)}</h3><div class="pr px" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}">${esc(l.price)}</div><span class="pxs" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}" hidden></span>
  <div class="sp">${l.bed?`<span>${l.bed} bed</span>`:""}${l.bath?`<span>${l.bath} bath</span>`:""}${l.land?`<span>Land ${esc(l.land)}</span>`:""}${l.building?`<span>Build ${esc(l.building)}</span>`:""}${l.type?`<span>${esc(l.type)}</span>`:""}</div></div></a>`};
 
 const id=new URLSearchParams(location.search).get("id");
@@ -136,7 +187,7 @@ loadListings().then(all=>{
     </div>
     <aside class="side">
       <div class="card">
-        <div class="price">${esc(l.price)}</div>${l.price_note?`<div class="pn">${esc(l.price_note)}</div>`:""}
+        ${NWCUR.html(1)}<div class="price px" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}">${esc(l.price)}</div><div class="pn pxs" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}" hidden></div>${l.price_note?`<div class="pn">${esc(l.price_note)}</div>`:""}<p class="fxn" hidden></p>
         <hr><div class="who"><img src="images/novi-portrait.jpg" alt=""><div><b>Novi Widiyawati</b><span>Bali Property &amp; Marketing Strategist</span></div></div>
         <div class="acts"><a class="btn btn-wa" href="https://wa.me/${WA}?text=${waText}" target="_blank" rel="noopener">${waIcon} Enquire on WhatsApp</a>
         <a class="btn btn-ghost" href="${mail}">Email Novi</a></div>
