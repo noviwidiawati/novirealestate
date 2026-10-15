@@ -1,6 +1,78 @@
 {
   "listings": [
     {
+      "slug": "elysian-vista-2-br-pool-villa-pandawa",
+      "title": "Elysian Vista: 2 BR Terracotta Pool Villa with Waterslide near Pandawa Beach",
+      "area": "Pandawa",
+      "tenure": "Leasehold",
+      "type": "Villa",
+      "status": "Under construction",
+      "price": "IDR 4,032,000,000",
+      "price_usd": 225000,
+      "price_note": "Fully furnished · 3 BR option also available",
+      "bed": 2,
+      "bath": 2,
+      "land": "100 m²",
+      "building": "150 m²",
+      "lease": "24 + 25 years (optional 5-year add-on: 29 + 25 years)",
+      "badge": "Waterslide pool",
+      "featured": true,
+      "summary": "A modern tropical two-bedroom villa by Kingswood Group, with a warm terracotta design, a curved designer pool with its own waterslide and waterfall, and a jacuzzi master suite, minutes from Pandawa and Melasti beaches.",
+      "description": "Elysian Vista is a boutique villa concept by Kingswood Group Bali, built to stand out in a short-term rental market full of look-alike boxes. Terracotta-toned walls, arched openings, green tiles and granite finishes give every room a warm, photogenic character.\n\nOn the ground floor, a sunken living area opens onto the pool deck, alongside a fully fitted kitchen and dining bar, a guest bedroom looking straight onto the pool and waterslide, and an ensuite with a walk-in shower. Upstairs, the master bedroom has a private balcony and an ensuite with a freestanding side-view jacuzzi bathtub.\n\nThe villa sits between Pandawa, Melasti and Nusa Dua, one of South Bali's fastest-growing areas: Pandawa Beach about 5 minutes away, Melasti Beach 7 minutes, cafés, supermarkets and padel courts within 5 minutes, and Savaya, White Rock and Sundays beach clubs within 8 to 12 minutes. The airport is roughly 35 minutes.\n\nThe project is under construction (around 40% complete at last update) and is sold fully furnished. Payment is staged: 5% booking deposit, 15% at contract signing, 75% over 10 monthly instalments and 5% at handover. A three-bedroom version is also available from USD 249,000.",
+      "highlights": [
+        "Curved designer pool with waterslide and cascading waterfall",
+        "Sunken living room opening onto the pool deck",
+        "Master suite with private balcony and side-view jacuzzi bathtub",
+        "Ground-floor bedroom with direct pool views",
+        "Fully furnished, modern tropical terracotta design",
+        "2 bedrooms, 2 bathrooms, 150 m² build on 100 m² land",
+        "Leasehold 24 + 25 years, with an optional 5-year add-on (USD 12,000)",
+        "Flexible payment plan: 5% / 15% / 10 monthly instalments / 5%",
+        "5 minutes to Pandawa Beach, 7 minutes to Melasti Beach",
+        "Built by Kingswood Group Bali, 45+ projects delivered"
+      ],
+      "yield_note": "Developer projection: around USD 220 per night at 78% occupancy, roughly USD 36,000 net profit per year. This is the developer's estimate, not a guaranteed return.",
+      "photos": [
+        {
+          "image": "images/listing-elysian-vista-1.jpg",
+          "alt": "Curved designer pool with waterslide and cascading waterfall"
+        },
+        {
+          "image": "images/listing-elysian-vista-2.jpg",
+          "alt": "Terracotta-inspired facade of Elysian Vista villa"
+        },
+        {
+          "image": "images/listing-elysian-vista-3.jpg",
+          "alt": "Sunken living room with open kitchen and dining"
+        },
+        {
+          "image": "images/listing-elysian-vista-4.jpg",
+          "alt": "Ground-floor bedroom opening onto the pool and waterslide"
+        },
+        {
+          "image": "images/listing-elysian-vista-5.jpg",
+          "alt": "Upstairs master bedroom with private balcony"
+        },
+        {
+          "image": "images/listing-elysian-vista-6.jpg",
+          "alt": "Master ensuite with green tiles and freestanding jacuzzi bathtub"
+        },
+        {
+          "image": "images/listing-elysian-vista-7.jpg",
+          "alt": "Master bathroom with side-view jacuzzi bathtub and garden outlook"
+        },
+        {
+          "image": "images/listing-elysian-vista-8.jpg",
+          "alt": "Ground-floor ensuite with walk-in shower and granite vanity"
+        },
+        {
+          "image": "images/listing-elysian-vista-9.jpg",
+          "alt": "Floor plan: ground floor and first floor"
+        }
+      ],
+      "agency": ""
+    },
+    {
       "photos": [
         {
           "image": "images/listing-558095-1.jpg",
