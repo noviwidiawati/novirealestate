@@ -1,0 +1,4 @@
+# Netlify build settings for noviwidiawati.com
+[build]
+  publish = "novirealestate 13"
+  command = "node \"novirealestate 13/_generate.mjs\""
