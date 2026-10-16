@@ -56,6 +56,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
 .filters button{font:600 .8rem/1 var(--body);padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
 .filters button.on{background:#0b0e0c;color:#EADDBF;border-color:#0b0e0c}
+.filters.st{margin:-14px 0 26px}.filters.st button{background:transparent}.filters.st .n{opacity:.6;font-weight:500;margin-left:2px}.filters.st button.on{background:var(--brass);color:var(--surface);border-color:var(--brass)}
 .count{font:500 .74rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 
 /* listing typography: Playfair + Manrope */
@@ -119,6 +120,7 @@ window.NWCUR=(function(){
 <main class="wrap">
   <div class="intro"><span class="eyebrow">Listings</span><h1>Villas and residences I’m <em>representing</em>.</h1><p>Official prices in IDR. Switch to USD or AUD for a guide at today’s rate. Ask me for floor plans, lease copies and rental projections.</p></div>
   <div class="fbar"><div class="filters" id="filters" role="group" aria-label="Filter by area"></div><script>document.write(NWCUR.html())</script></div>
+  <div class="filters st" id="sfilters" role="group" aria-label="Filter by status"></div>
   <div class="count" id="count"></div>
   <div class="lgrid" id="grid"><div class="empty">Loading listings…</div></div>
 </main>
@@ -130,22 +132,28 @@ const loadListings=()=>fetch("data/listings.json",{cache:"no-cache"}).then(r=>{i
 const WA="6287781033323", EMAIL="noviwidiyawati89@gmail.com";
 const waIcon='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.3.1.2.1.7-.1 1.3Z"/></svg>';
 document.getElementById("yr").textContent=new Date().getFullYear();
+const STS=["Completed","Under construction","Off-plan"];
+const stg=l=>{const s=String(l.status||"").toLowerCase();return STS.find(x=>s.startsWith(x.toLowerCase()))||""};
 /*CARD-START*/
 const cardHTML=l=>{const p=(l.photos||[])[0];return `<a class="lcard" href="property/${encodeURIComponent(l.slug)}/">
  <div class="ph">${p?`<img src="${esc(img(p))}" alt="${esc(p.alt||l.title)}" loading="lazy">`:""}${l.badge?`<span class="badge">${esc(l.badge)}</span>`:""}</div>
- <div class="bd"><span class="loc">${esc(l.area)} · ${esc(l.tenure)}</span><h3>${esc(l.title)}</h3><div class="pr px" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}">${esc(l.price)}</div><span class="pxs" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}" hidden></span>
+ <div class="bd"><span class="loc">${esc(l.area)} · ${esc(l.tenure)}${stg(l)?` · ${esc(stg(l))}`:""}</span><h3>${esc(l.title)}</h3><div class="pr px" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}">${esc(l.price)}</div><span class="pxs" data-idr="${esc(l.price)}" data-usd="${l.price_usd||""}" hidden></span>
  <div class="sp">${l.bed?`<span>${l.bed} bed</span>`:""}${l.bath?`<span>${l.bath} bath</span>`:""}${l.land?`<span>Land ${esc(l.land)}</span>`:""}${l.building?`<span>Build ${esc(l.building)}</span>`:""}${l.type?`<span>${esc(l.type)}</span>`:""}</div></div></a>`};
 
 loadListings().then(all=>{
   const grid=document.getElementById("grid"), fl=document.getElementById("filters"), ct=document.getElementById("count");
   const areas=["All",...new Set(all.map(l=>l.area).filter(Boolean))];
-  let cur="All";
-  const render=()=>{const list=cur==="All"?all:all.filter(l=>l.area===cur);
-    grid.innerHTML=list.length?list.map(cardHTML).join(""):`<div class="empty">No listings in this area right now.</div>`;
+  const sf=document.getElementById("sfilters");
+  let cur="All", st="All";
+  const render=()=>{const list=all.filter(l=>(cur==="All"||l.area===cur)&&(st==="All"||stg(l)===st));
+    grid.innerHTML=list.length?list.map(cardHTML).join(""):`<div class="empty">No listings match this filter right now.</div>`;
     ct.textContent=`${list.length} listing${list.length===1?"":"s"}`;
-    fl.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.a===cur))};
+    fl.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.a===cur));
+    sf.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.s===st))};
   fl.innerHTML=areas.map(a=>`<button type="button" data-a="${esc(a)}">${esc(a)}</button>`).join("");
+  sf.innerHTML=["All",...STS].map(x=>`<button type="button" data-s="${esc(x)}">${x==="All"?"All status":esc(x)} <span class="n">${x==="All"?all.length:all.filter(l=>stg(l)===x).length}</span></button>`).join("");
   fl.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cur=b.dataset.a;render()}});
+  sf.addEventListener("click",e=>{const b=e.target.closest("button");if(b){st=b.dataset.s;render()}});
   render();
 }).catch(()=>{document.getElementById("grid").innerHTML=`<div class="empty">Listings could not be loaded. Please refresh the page.</div>`});
 </script>
