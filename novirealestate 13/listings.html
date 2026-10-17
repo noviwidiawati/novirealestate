@@ -53,10 +53,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 
 .intro{padding:clamp(40px,7vw,80px) 0 26px}.intro h1{font-size:clamp(2.2rem,5vw,3.6rem);margin-top:12px}.intro h1 em{color:var(--brass)}
 .intro p{color:var(--muted);max-width:56ch;margin:14px 0 0}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
-.filters button{font:600 .8rem/1 var(--body);padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
-.filters button.on{background:#0b0e0c;color:#EADDBF;border-color:#0b0e0c}
-.filters.st{margin:-14px 0 26px}.filters.st button{background:transparent}.filters.st .n{opacity:.6;font-weight:500;margin-left:2px}.filters.st button.on{background:var(--brass);color:var(--surface);border-color:var(--brass)}
 .count{font:500 .74rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 
 /* listing typography: Playfair + Manrope */
@@ -71,7 +67,62 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-betw
 .curt button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 .fxn{margin:0;font:400 .74rem/1.45 var(--body);color:var(--muted);max-width:44ch}
 .pxs{display:block;font:500 .78rem/1.35 var(--body);color:var(--muted);margin-top:3px;letter-spacing:0}
-.fbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px 24px;margin:0 0 26px}.fbar .filters{margin:0;flex:1 1 480px}.fbar .curbox{margin-left:auto}.fbar .curbox{justify-items:end}.fbar .fxn{text-align:right}@media(max-width:640px){.fbar .curbox{justify-items:start}.fbar .fxn{text-align:left}}
+/* filter panel */
+.fp{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 48px -36px rgba(0,0,0,.35);margin:0 0 28px}
+.fp-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;padding:20px 22px 18px}
+.ff{display:grid;gap:8px;position:relative;min-width:0}
+.ff>label,.ff>.fl{font:600 .66rem/1 "Manrope",var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.dd{display:flex;align-items:center;gap:6px;width:100%;min-height:46px;padding:7px 36px 7px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 .86rem/1.2 var(--body);text-align:left;cursor:pointer;position:relative;overflow:hidden;white-space:nowrap;transition:border-color .2s,box-shadow .2s}
+.dd:hover{border-color:color-mix(in srgb,var(--brass) 55%,var(--line))}
+.dd[aria-expanded="true"],.dd:focus-visible{outline:0;border-color:var(--brass);box-shadow:0 0 0 3px color-mix(in srgb,var(--brass) 22%,transparent)}
+.dd::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+.dd[aria-expanded="true"]::after{transform:translateY(-30%) rotate(-135deg)}
+.dd .ph0{color:var(--muted)}
+.chip{display:inline-block;flex:none;font:700 .64rem/1 "Manrope",var(--body);letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;border-radius:5px;background:var(--brass-soft);color:var(--ink)}
+.more{flex:none;font:600 .74rem/1 var(--body);color:var(--muted)}
+.pop{position:absolute;z-index:30;top:calc(100% + 6px);left:0;min-width:100%;width:max-content;max-width:min(320px,86vw);max-height:340px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 22px 44px -18px rgba(0,0,0,.35);padding:8px}
+.pop[hidden]{display:none}
+.ff:nth-child(n+5) .pop{left:auto;right:0}
+.og{font:600 .62rem/1 "Manrope",var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--brass);padding:12px 10px 6px}
+.og:first-child{padding-top:6px}
+.opt{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:500 .86rem/1.2 var(--body);text-align:left;cursor:pointer}
+.opt:hover,.opt:focus-visible{outline:0;background:var(--sunk)}
+.opt .bx{flex:none;width:16px;height:16px;border:1.5px solid var(--line);border-radius:4px;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.opt.rad .bx{border-radius:50%}
+.opt[aria-checked="true"] .bx{background:var(--brass);border-color:var(--brass)}
+.opt[aria-checked="true"] .bx::after{content:"";width:7px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:translateY(-1px) rotate(-45deg)}
+.opt.rad[aria-checked="true"] .bx::after{width:6px;height:6px;border:0;border-radius:50%;background:#fff;transform:none}
+.opt .c{margin-left:auto;font:500 .74rem/1 var(--mono);color:var(--muted)}
+.opt[disabled]{opacity:.4;cursor:default}
+.fp-foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:14px 22px;border-top:1px solid var(--line);background:color-mix(in srgb,var(--sunk) 45%,var(--surface));border-radius:0 0 16px 16px}
+.clr{font:600 .84rem/1 var(--body);color:var(--ink);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--line)}
+.clr:hover{text-decoration-color:var(--brass)}.clr[disabled]{opacity:.4;cursor:default}
+.fp-foot .count{margin:0}
+.fp-foot .curbox{margin-left:auto;justify-items:end}.fp-foot .fxn{text-align:right}
+.ftog{display:none}
+@media (max-width:1020px){.fp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ff:nth-child(n+5) .pop{left:0;right:auto}.ff:nth-child(3n) .pop{left:auto;right:0}}
+@media (max-width:640px){
+  .ftog{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:52px;padding:0 18px;border:0;background:none;color:var(--ink);font:600 .92rem/1 var(--body);cursor:pointer}
+  .ftog .n{font:700 .7rem/1 "Manrope",var(--body);background:var(--brass);color:var(--surface);border-radius:999px;padding:5px 8px;margin-left:8px}
+  .ftog .n[hidden]{display:none}
+  .ftog svg{width:18px;height:18px;transition:transform .2s}.fp.open .ftog svg{transform:rotate(180deg)}
+  .fp-grid{grid-template-columns:1fr 1fr;padding:4px 16px 16px;gap:14px}
+  .fp:not(.open) .fp-grid{display:none}
+  .ff:nth-child(odd) .pop{left:0;right:auto}.ff:nth-child(even) .pop{left:auto;right:0}
+  .fp-foot{padding:12px 16px}.fp-foot .curbox{margin-left:0;justify-items:start;width:100%}.fp-foot .fxn{text-align:left}
+}
+/* border beam */
+@property --beam{syntax:"<angle>";initial-value:0deg;inherits:false}
+.fp{position:relative;--b1:#F3DFA8;--b2:#C9A36A;--b3:#8E6A33}
+.fp.em{--b1:#7FE3B8;--b2:#1FA97A;--b3:#12543E}
+.fp::before,.fp::after{content:"";position:absolute;inset:-1px;border-radius:17px;pointer-events:none;
+  background:conic-gradient(from var(--beam),transparent 0deg,transparent 250deg,var(--b3) 290deg,var(--b2) 330deg,var(--b1) 352deg,transparent 360deg);
+  animation:beam 6s linear infinite}
+.fp::before{padding:1.5px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);z-index:2}
+.fp::after{z-index:-1;filter:blur(14px);opacity:.55}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .fp::after{opacity:.35}}
+@keyframes beam{to{--beam:360deg}}
+@media (prefers-reduced-motion:reduce){.fp::before,.fp::after{animation:none}}
 </style>
 <script>
 window.NWCUR=(function(){
@@ -119,9 +170,11 @@ window.NWCUR=(function(){
 <nav class="nav"><a class="hide-sm" href="./">Home</a><a class="cta" href="./#contact">Book a call</a></nav></div></header>
 <main class="wrap">
   <div class="intro"><span class="eyebrow">Listings</span><h1>Villas and residences I’m <em>representing</em>.</h1><p>Official prices in IDR. Switch to USD or AUD for a guide at today’s rate. Ask me for floor plans, lease copies and rental projections.</p></div>
-  <div class="fbar"><div class="filters" id="filters" role="group" aria-label="Filter by area"></div><script>document.write(NWCUR.html())</script></div>
-  <div class="filters st" id="sfilters" role="group" aria-label="Filter by status"></div>
-  <div class="count" id="count"></div>
+  <section class="fp" id="fp" aria-label="Filter listings">
+    <button type="button" class="ftog" aria-controls="fpg"><span>Filters<span class="n" hidden></span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    <div class="fp-grid" id="fpg"></div>
+    <div class="fp-foot"><button type="button" class="clr" disabled>Clear all</button><div class="count" id="count" aria-live="polite"></div><script>document.write(NWCUR.html())</script></div>
+  </section>
   <div class="lgrid" id="grid"><div class="empty">Loading listings…</div></div>
 </main>
 <footer><div class="wrap"><span>© <span id="yr">2026</span> Novi Widiyawati · Bali Property &amp; Marketing Strategist</span><span>Prices and details are provided by the developer or vendor and may change. Please verify with your notary before committing.</span></div></footer>
@@ -141,19 +194,48 @@ const cardHTML=l=>{const p=(l.photos||[])[0];return `<a class="lcard" href="prop
  <div class="sp">${l.bed?`<span>${l.bed} bed</span>`:""}${l.bath?`<span>${l.bath} bath</span>`:""}${l.land?`<span>Land ${esc(l.land)}</span>`:""}${l.building?`<span>Build ${esc(l.building)}</span>`:""}${l.type?`<span>${esc(l.type)}</span>`:""}</div></div></a>`};
 
 loadListings().then(all=>{
-  const grid=document.getElementById("grid"), fl=document.getElementById("filters"), ct=document.getElementById("count");
-  const areas=["All",...new Set(all.map(l=>l.area).filter(Boolean))];
-  const sf=document.getElementById("sfilters");
-  let cur="All", st="All";
-  const render=()=>{const list=all.filter(l=>(cur==="All"||l.area===cur)&&(st==="All"||stg(l)===st));
-    grid.innerHTML=list.length?list.map(cardHTML).join(""):`<div class="empty">No listings match this filter right now.</div>`;
-    ct.textContent=`${list.length} listing${list.length===1?"":"s"}`;
-    fl.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.a===cur));
-    sf.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.s===st))};
-  fl.innerHTML=areas.map(a=>`<button type="button" data-a="${esc(a)}">${esc(a)}</button>`).join("");
-  sf.innerHTML=["All",...STS].map(x=>`<button type="button" data-s="${esc(x)}">${x==="All"?"All status":esc(x)} <span class="n">${x==="All"?all.length:all.filter(l=>stg(l)===x).length}</span></button>`).join("");
-  fl.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cur=b.dataset.a;render()}});
-  sf.addEventListener("click",e=>{const b=e.target.closest("button");if(b){st=b.dataset.s;render()}});
+  const grid=document.getElementById("grid"), ct=document.getElementById("count"), fp=document.getElementById("fp");
+  const REG=[["Canggu & surrounds",["Canggu","Berawa","Pererenan","Batu Belig","Umalas","Kerobokan","Tumbak Bayuh","Dalung","Seminyak"]],["West coast",["Seseh","Munggu","Cemagi","Nyanyi","Tabanan"]],["Bukit Peninsula",["Uluwatu","Pandawa","Nusa Dua","Bingin","Jimbaran","Ungasan"]],["Ubud & East Bali",["Ubud","Sidemen"]]];
+  const known=new Set(REG.flatMap(r=>r[1]));const other=[...new Set(all.map(l=>l.area).filter(a=>a&&!known.has(a)))];if(other.length)REG.push(["Other areas",other]);
+  const usd=l=>+l.price_usd||((+String(l.price||"").replace(/[^\d]/g,""))/17920)||0;
+  const maxBed=l=>{const m=String(l.title||"").match(/(\d+)\s*[–-]\s*(\d+)\s*BR/i);return m?+m[2]:(+l.bed||0)};
+  const PR=[["u200","Under USD 200k",0,2e5],["200-400","USD 200k – 400k",2e5,4e5],["400-700","USD 400k – 700k",4e5,7e5],["700-1m","USD 700k – 1M",7e5,1e6],["1m","USD 1M +",1e6,1/0]];
+  const F={
+    loc:{label:"Location",multi:1,groups:REG.map(([g,a])=>[g,a.filter(x=>all.some(l=>l.area===x)).map(x=>[x,x])]).filter(g=>g[1].length),test:(l,v)=>v.includes(l.area)},
+    status:{label:"Status",multi:1,groups:[[0,STS.map(s=>[s,s])]],test:(l,v)=>v.includes(stg(l))},
+    type:{label:"Property type",multi:1,groups:[[0,[...new Set(all.map(l=>l.type).filter(Boolean))].map(t=>[t,t])]],test:(l,v)=>v.includes(l.type)},
+    own:{label:"Ownership",multi:1,groups:[[0,[["Freehold","Freehold"],["Leasehold","Leasehold"]]]],test:(l,v)=>v.some(x=>String(l.tenure||"").startsWith(x))},
+    price:{label:"Price",multi:0,groups:[[0,PR.map(p=>[p[0],p[1]])]],test:(l,v)=>{const p=PR.find(x=>x[0]===v[0]),u=usd(l);return p&&u>=p[2]&&u<p[3]}},
+    bed:{label:"Bedrooms",multi:0,groups:[[0,[1,2,3,4,5].map(n=>[String(n),n+"+ bed"+(n>1?"s":"")])]],test:(l,v)=>maxBed(l)>=+v[0]}
+  };
+  const K=Object.keys(F), sel={};K.forEach(k=>sel[k]=[]);
+  const qp=new URLSearchParams(location.search);K.forEach(k=>{const v=qp.get(k);if(v)sel[k]=v.split(",").filter(Boolean)});
+  const pass=(l,skip)=>K.every(k=>k===skip||!sel[k].length||F[k].test(l,sel[k]));
+  const grid2=fp.querySelector(".fp-grid");
+  grid2.innerHTML=K.map(k=>`<div class="ff" data-k="${k}"><span class="fl" id="fl-${k}">${F[k].label}</span><button type="button" class="dd" aria-haspopup="true" aria-expanded="false" aria-labelledby="fl-${k}"></button><div class="pop" role="${F[k].multi?"group":"radiogroup"}" aria-labelledby="fl-${k}" hidden></div></div>`).join("");
+  const label=k=>{const v=sel[k];if(!v.length)return`<span class="ph0">Any</span>`;const names=v.map(x=>(F[k].groups.flatMap(g=>g[1]).find(o=>o[0]===x)||[x,x])[1]);
+    return k==="price"||k==="bed"?`<span>${esc(names[0])}</span>`:`<span class="chip">${esc(names[0])}</span>${names.length>1?`<span class="more">+${names.length-1}</span>`:""}`};
+  const pop=k=>F[k].groups.map(([g,opts])=>(g?`<div class="og">${esc(g)}</div>`:"")+opts.map(([v,t])=>{const on=sel[k].includes(v);const n=all.filter(l=>pass(l,k)&&F[k].test(l,[v])).length;
+    return `<button type="button" class="opt${F[k].multi?"":" rad"}" role="${F[k].multi?"checkbox":"radio"}" data-v="${esc(v)}" aria-checked="${on}"${!n&&!on?" disabled":""}><span class="bx"></span>${esc(t)}<span class="c">${n}</span></button>`}).join("")).join("");
+  const sync=()=>{const p=new URLSearchParams();K.forEach(k=>{if(sel[k].length)p.set(k,sel[k].join(","))});const s=p.toString();history.replaceState(null,"",location.pathname+(s?"?"+s:""))};
+  const render=()=>{const list=all.filter(l=>pass(l));
+    grid.innerHTML=list.length?list.map(cardHTML).join(""):`<div class="empty">No listings match these filters. <button type="button" class="clr" data-clear>Clear all filters</button></div>`;
+    ct.textContent=`${list.length} of ${all.length} listing${all.length===1?"":"s"}`;
+    fp.querySelectorAll(".ff").forEach(f=>{const k=f.dataset.k;f.querySelector(".dd").innerHTML=label(k);const p=f.querySelector(".pop");if(!p.hidden)p.innerHTML=pop(k)});
+    const n=K.reduce((a,k)=>a+sel[k].length,0);fp.querySelector(".clr").disabled=!n;const b=fp.querySelector(".ftog .n");b.textContent=n;b.hidden=!n;sync()};
+  const close=()=>fp.querySelectorAll(".ff").forEach(f=>{f.querySelector(".pop").hidden=true;f.querySelector(".dd").setAttribute("aria-expanded","false")});
+  fp.addEventListener("click",e=>{
+    const t=e.target;
+    if(t.closest(".ftog")){fp.classList.toggle("open");return}
+    if(t.closest(".fp-foot .clr")){K.forEach(k=>sel[k]=[]);close();render();return}
+    const dd=t.closest(".dd");if(dd){const f=dd.parentNode,p=f.querySelector(".pop"),was=!p.hidden;close();if(!was){p.innerHTML=pop(f.dataset.k);p.hidden=false;dd.setAttribute("aria-expanded","true");const o=p.querySelector(".opt:not([disabled])");o&&o.focus({preventScroll:true})}return}
+    const o=t.closest(".opt");if(o&&!o.disabled){const k=o.closest(".ff").dataset.k,v=o.dataset.v;
+      if(F[k].multi)sel[k]=sel[k].includes(v)?sel[k].filter(x=>x!==v):[...sel[k],v];else{sel[k]=sel[k][0]===v?[]:[v];close()}
+      render();const p=o.closest(".pop");if(p&&!p.hidden){const q=p.querySelector(`.opt[data-v="${CSS.escape(v)}"]`);q&&q.focus({preventScroll:true})}}
+  });
+  grid.addEventListener("click",e=>{if(e.target.closest("[data-clear]")){K.forEach(k=>sel[k]=[]);render()}});
+  document.addEventListener("click",e=>{if(e.target.isConnected&&!e.target.closest(".ff"))close()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){const open=fp.querySelector('.dd[aria-expanded="true"]');close();open&&open.focus()}});
   render();
 }).catch(()=>{document.getElementById("grid").innerHTML=`<div class="empty">Listings could not be loaded. Please refresh the page.</div>`});
 </script>
