@@ -733,6 +733,55 @@ html.intro-on body{overflow:hidden}
 .cur-col{display:grid;gap:14px;justify-items:start}.cf-info .price .pxs{flex-basis:100%;text-align:center;margin-top:0}
 .thm{position:relative;display:inline-grid;place-items:center;width:40px;height:40px;flex:none;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;padding:0;transition:transform .2s,border-color .2s}.thm:hover{border-color:var(--brass)}.thm:active{transform:scale(.92)}.thm:focus-visible{outline:2px solid var(--brass);outline-offset:2px}.thm svg{position:absolute;width:18px;height:18px;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s}.thm .i-sun{opacity:0;transform:rotate(-90deg) scale(.5)}html.is-dark .thm .i-sun{opacity:1;transform:none}html.is-dark .thm .i-moon{opacity:0;transform:rotate(90deg) scale(.5)}.hdr-r{display:flex;align-items:center;gap:10px}
 .specs span{display:inline-flex;align-items:center;gap:6px}.specs svg{width:15px;height:15px;flex:none;color:var(--brass)}
+
+/* ROI calculator */
+.rc-top{display:grid;grid-template-columns:1fr;gap:8px;padding:22px 0 18px}
+.rc-lab,.rc-h{font:600 .68rem/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--ink) 62%,var(--bg));margin:0}
+.rc-h span{letter-spacing:.06em;text-transform:none;font-weight:400;margin-left:6px}
+.rc-sel{position:relative}
+.rc-sel select{appearance:none;-webkit-appearance:none;width:100%;min-height:52px;padding:12px 44px 12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 1rem/1.3 var(--body);cursor:pointer}
+.rc-sel select:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.rc-sel svg{position:absolute;right:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--brass);pointer-events:none}
+.rc-facts{display:flex;flex-wrap:wrap;gap:6px 18px;font:400 .78rem/1.4 var(--mono);color:var(--muted)}
+.rc-facts b{font-weight:500;color:var(--ink)}
+.rc-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,3vw,36px);padding-top:20px;border-top:1px solid var(--line)}
+.rc-in{display:grid;gap:18px;align-content:start}
+.rc-f{display:grid;gap:8px}
+.rc-fl{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.rc-fl label{font:500 .92rem/1.3 var(--body);color:var(--ink)}
+.rc-fl output{font:500 .92rem/1 var(--mono);color:var(--brass);font-variant-numeric:tabular-nums}
+.rc-f small{font-size:.74rem;line-height:1.4;color:var(--muted)}
+.rc input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:pointer;--p:50%}
+.rc input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--brass) var(--p),var(--line) var(--p))}
+.rc input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--brass) var(--p),var(--line) var(--p))}
+.rc input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:50%;background:var(--surface);border:2px solid var(--brass);box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.rc input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--brass)}
+.rc input[type=range]:focus-visible{outline:2px solid var(--brass);outline-offset:4px;border-radius:4px}
+.rc-reset{justify-self:start;padding:0;border:0;background:none;font:600 .78rem/1 var(--body);color:var(--ink);border-bottom:1px solid var(--brass);padding-bottom:3px;cursor:pointer}
+.rc-out{display:grid;gap:16px;align-content:start;padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.rc-big{display:grid;gap:4px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.rc-k{font-size:.82rem;color:var(--muted)}
+.rc-big b{font:italic 400 clamp(2.2rem,4vw,3rem)/1 var(--display);color:var(--brass);font-variant-numeric:tabular-nums}
+.rc-sub{font:400 .8rem/1.4 var(--mono);color:var(--muted)}
+.rc-rows{display:grid;gap:9px;margin:0}
+.rc-rows div{display:flex;justify-content:space-between;gap:12px;font-size:.88rem}
+.rc-rows dt{color:color-mix(in srgb,var(--ink) 72%,var(--bg))}
+.rc-rows dd{margin:0;font:500 .86rem/1.3 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.rc-rows .t{padding-top:9px;border-top:1px dashed var(--line)}
+.rc-rows .t dt,.rc-rows .t dd{font-weight:600;color:var(--ink)}
+.rc-bar{display:flex;height:10px;border-radius:6px;overflow:hidden;background:var(--line)}
+.rc-bar i{display:block;height:100%;transition:width .45s cubic-bezier(.22,.8,.3,1)}
+.rc .b1{background:color-mix(in srgb,var(--ink) 55%,var(--bg))}.rc .b2{background:color-mix(in srgb,var(--ink) 30%,var(--bg))}.rc .b3{background:color-mix(in srgb,var(--brass) 40%,var(--bg))}.rc .b4{background:var(--brass)}
+.rc-leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.72rem;color:var(--muted)}
+.rc-leg span{display:inline-flex;align-items:center;gap:6px}.rc-leg i{width:9px;height:9px;border-radius:2px}
+.rc-dev{margin:0;padding:10px 12px;border-radius:8px;background:color-mix(in srgb,var(--brass) 10%,transparent);font-size:.8rem;line-height:1.5;color:color-mix(in srgb,var(--ink) 80%,var(--bg))}
+.rc-dev:empty{display:none}
+.rc-dev b{color:var(--ink)}
+.js .numbers:not(.in) .rc-top,.js .numbers:not(.in) .rc-grid{opacity:0;transform:translateY(14px)}
+.rc-top,.rc-grid{transition:opacity .7s ease .5s,transform .7s cubic-bezier(.22,.8,.3,1) .5s}
+.rc-grid{transition-delay:.65s}
+@media (min-width:981px){.numbers .rt-intro{position:sticky;top:110px}}
+@media (max-width:760px){.rc-grid{grid-template-columns:1fr}.rc-out{padding:16px}}
 </style>
 </head>
 <body>
@@ -998,45 +1047,50 @@ window.NWCUR=(function(){
   <section id="numbers" class="numbers" aria-labelledby="rtTitle">
     <div class="wrap">
       <div class="rt-intro">
-        <span class="eyebrow">Return estimates</span>
-        <h2 id="rtTitle" aria-label="Projected returns, put in context."><span class="ln" aria-hidden="true"><span>Projected returns,</span></span><span class="ln" aria-hidden="true"><span>put in <em>context</em>.</span></span></h2>
-        <p class="lede">Each figure comes from the developer. Before you rely on it, I help you examine the assumptions against available comparable data, including occupancy, nightly rates, operating costs and management fees.</p>
+        <span class="eyebrow">Bali ROI calculator</span>
+        <h2 id="rtTitle" aria-label="Run the numbers, put in context."><span class="ln" aria-hidden="true"><span>Run the numbers,</span></span><span class="ln" aria-hidden="true"><span>put in <em>context</em>.</span></span></h2>
+        <p class="lede">Developer projections rarely show the full picture. With this Bali ROI calculator you choose a property, adjust the assumptions and see what remains after management, running costs and, for leasehold, the lease running down. I then check your numbers against comparable villas.</p>
       </div>
-      <div class="rt-wrap">
+      <div class="rt-wrap rc" id="rc">
         <div class="rt-line" aria-hidden="true"></div>
-        <table class="rt" id="rtTable" aria-describedby="rtDisc">
-          <caption class="rt-sr">Comparison of current property prices, lease terms and developer-provided return estimates.</caption>
-          <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
-          <thead><tr><th scope="col">Property</th><th scope="col" class="r">Asking price</th><th scope="col" class="lt">Lease term</th><th scope="col" class="r">Developer estimate</th></tr></thead>
-          <tbody>
-              <tr style="--i:0" data-prop="2 Bedroom Tropical Pool Villa, Uluwatu" data-wa="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%202%20Bedroom%20Tropical%20Pool%20Villa%2C%20Uluwatu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data.">
-                <th scope="row"><span class="pn">2 Bedroom Tropical Pool Villa</span><span class="pl">Uluwatu</span><a class="ra" href="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%202%20Bedroom%20Tropical%20Pool%20Villa%2C%20Uluwatu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data." target="_blank" rel="noopener">Request assumptions <span aria-hidden="true">→</span><span class="rt-sr"> for the 2 Bedroom Tropical Pool Villa, Uluwatu (opens WhatsApp)</span></a></th>
-                <td class="r" data-label="Asking price"><span class="price"><span class="mask"><span aria-hidden="true">IDR 4.18B</span></span><span class="rt-sr">IDR 4,182,500,000</span></span></td>
-                <td class="lt" data-label="Lease term"><span class="lease">30 years<small>+ 30-year extension option</small></span></td>
-                <td class="r est-cell" data-label="Developer estimate"><span class="est"><span class="mask"><span aria-hidden="true">13–17%<sup>*</sup></span></span><span class="rt-sr">Developer estimate: 13 to 17 percent, see note below the table</span></span></td>
-              </tr>
-              <tr style="--i:1" data-prop="3 Bedroom Mediterranean Villa with Rooftop Bar, Uluwatu" data-wa="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%203%20Bedroom%20Mediterranean%20Villa%20with%20Rooftop%20Bar%2C%20Uluwatu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data.">
-                <th scope="row"><span class="pn">3 Bedroom Mediterranean Villa with Rooftop Bar</span><span class="pl">Uluwatu</span><a class="ra" href="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%203%20Bedroom%20Mediterranean%20Villa%20with%20Rooftop%20Bar%2C%20Uluwatu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data." target="_blank" rel="noopener">Request assumptions <span aria-hidden="true">→</span><span class="rt-sr"> for the 3 Bedroom Mediterranean Villa with Rooftop Bar, Uluwatu (opens WhatsApp)</span></a></th>
-                <td class="r" data-label="Asking price"><span class="price"><span class="mask"><span aria-hidden="true">IDR 5.23B</span></span><span class="rt-sr">IDR 5,232,500,000</span></span></td>
-                <td class="lt" data-label="Lease term"><span class="lease">30 years<small>+ 30-year extension option</small></span></td>
-                <td class="r est-cell" data-label="Developer estimate"><span class="est"><span class="mask"><span aria-hidden="true">12–15%<sup>*</sup></span></span><span class="rt-sr">Developer estimate: 12 to 15 percent, see note below the table</span></span></td>
-              </tr>
-              <tr style="--i:2" data-prop="4 Bedroom Villa with Rice Field Views, Canggu" data-wa="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%204%20Bedroom%20Villa%20with%20Rice%20Field%20Views%2C%20Canggu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data.">
-                <th scope="row"><span class="pn">4 Bedroom Villa with Rice Field Views</span><span class="pl">Canggu</span><a class="ra" href="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%204%20Bedroom%20Villa%20with%20Rice%20Field%20Views%2C%20Canggu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data." target="_blank" rel="noopener">Request assumptions <span aria-hidden="true">→</span><span class="rt-sr"> for the 4 Bedroom Villa with Rice Field Views, Canggu (opens WhatsApp)</span></a></th>
-                <td class="r" data-label="Asking price"><span class="price"><span class="mask"><span aria-hidden="true">IDR 6.42B</span></span><span class="rt-sr">IDR 6,424,000,000</span></span></td>
-                <td class="lt" data-label="Lease term"><span class="lease">28 years<small>+ extension option</small></span></td>
-                <td class="r est-cell" data-label="Developer estimate"><span class="est"><span class="mask"><span aria-hidden="true">Up to 12%<sup>*</sup></span></span><span class="rt-sr">Developer estimate: up to 12 percent, see note below the table</span></span></td>
-              </tr>
-          </tbody>
-          <tfoot><tr><td colspan="4" class="r">Detailed calculation basis available on request.</td></tr></tfoot>
-        </table>
+        <div class="rc-top">
+          <label class="rc-lab" for="rcProp">Property</label>
+          <div class="rc-sel"><select id="rcProp"><option>Loading listings…</option></select><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>
+          <div class="rc-facts" id="rcFacts"></div>
+        </div>
+        <div class="rc-grid">
+          <div class="rc-in" role="group" aria-label="Your assumptions">
+            <p class="rc-h">Your assumptions</p>
+            <div class="rc-f"><div class="rc-fl"><label for="rcRate">Nightly rate</label><output id="rcRateO"></output></div><input type="range" id="rcRate" min="40" max="1500" step="5"><small id="rcRateN">Average across the year, in USD</small></div>
+            <div class="rc-f"><div class="rc-fl"><label for="rcOcc">Occupancy</label><output id="rcOccO"></output></div><input type="range" id="rcOcc" min="20" max="95" step="1"><small>Share of nights booked per year · Bali market average is about 40–50%</small></div>
+            <div class="rc-f"><div class="rc-fl"><label for="rcMgmt">Management fee</label><output id="rcMgmtO"></output></div><input type="range" id="rcMgmt" min="0" max="35" step="1"><small>% of rental revenue</small></div>
+            <div class="rc-f"><div class="rc-fl"><label for="rcOpex">Running costs</label><output id="rcOpexO"></output></div><input type="range" id="rcOpex" min="5" max="40" step="1"><small>Booking commissions, utilities, staff, upkeep · % of revenue</small></div>
+            <div class="rc-f" id="rcLeaseF"><div class="rc-fl"><label for="rcLease">Lease remaining</label><output id="rcLeaseO"></output></div><input type="range" id="rcLease" min="5" max="100" step="1"><small>Used to spread the purchase price over the lease</small></div>
+            <button type="button" class="rc-reset" id="rcReset">Reset to typical values</button>
+          </div>
+          <div class="rc-out" aria-live="polite">
+            <p class="rc-h">Estimated result <span>per year, before tax</span></p>
+            <div class="rc-big"><span class="rc-k">Net return after lease depreciation</span><b id="rcTrue">–</b><span class="rc-sub" id="rcTrueSub"></span></div>
+            <dl class="rc-rows">
+              <div><dt>Rental revenue</dt><dd id="rcGross">–</dd></div>
+              <div><dt>Management fee</dt><dd id="rcFee">–</dd></div>
+              <div><dt>Running costs</dt><dd id="rcCost">–</dd></div>
+              <div class="t"><dt>Net rental income</dt><dd id="rcNoi">–</dd></div>
+              <div><dt>Net rental yield</dt><dd id="rcYield">–</dd></div>
+              <div id="rcDepR"><dt>Lease depreciation</dt><dd id="rcDep">–</dd></div>
+              <div><dt>Years to recover price</dt><dd id="rcPay">–</dd></div>
+            </dl>
+            <div class="rc-bar" aria-hidden="true"><i class="b1" id="rcB1"></i><i class="b2" id="rcB2"></i><i class="b3" id="rcB3"></i><i class="b4" id="rcB4"></i></div>
+            <div class="rc-leg" aria-hidden="true"><span><i class="b1"></i>Fees</span><span><i class="b2"></i>Costs</span><span><i class="b3"></i>Depreciation</span><span><i class="b4"></i>Your return</span></div>
+            <p class="rc-dev" id="rcDev"></p>
+          </div>
+        </div>
         <div class="rt-notes">
-          <p>Extension terms and pricing depend on the individual lease agreement.</p>
-          <p class="disc" id="rtDisc">*Developer-provided estimates, not guaranteed returns. Actual performance depends on occupancy, nightly rates, management fees, operating costs, taxes and market conditions. Figures are general information, not financial advice. Verify all legal, tax and financial assumptions independently before investing.</p>
+          <p class="disc" id="rtDisc">Estimates based on the assumptions you enter, not guaranteed returns. Results are before tax and exclude purchase costs, furniture refresh and any lease extension price. Leasehold depreciation spreads the purchase price evenly over the remaining lease. Figures are general information, not financial advice. Verify all legal, tax and financial assumptions independently before investing.</p>
         </div>
         <div class="rt-cta">
-          <a class="rt-btn" id="rtBtn" href="https://wa.me/6287781033323?text=Hi%20Novi%2C%20could%20you%20send%20me%20the%20full%20assumptions%20for%20the%202%20Bedroom%20Tropical%20Pool%20Villa%2C%20Uluwatu%3F%20I%27d%20like%20to%20see%20the%20rental%20projection%2C%20estimated%20costs%20and%20any%20available%20comparable%20data." target="_blank" rel="noopener">Request the full assumptions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <p>Ask for the rental projection, estimated costs and available comparable data for any property. <span id="rtSel" aria-live="polite">Selected: <b>2 Bedroom Tropical Pool Villa, Uluwatu</b></span></p>
+          <a class="rt-btn" id="rtBtn" href="https://wa.me/6287781033323" target="_blank" rel="noopener">Send me this calculation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <p>I’ll check your numbers against comparable villas and send the developer’s full assumptions. <span id="rtSel" aria-live="polite"></span></p>
         </div>
       </div>
     </div>
@@ -1469,16 +1523,58 @@ document.documentElement.classList.add("js");
   }
 })();
 
-// ---- Return estimates: one-time reveal + row selection
+// ---- ROI calculator (uses data/listings.json, so new listings appear automatically)
 (function(){
+  const sec=document.getElementById("numbers"), root=document.getElementById("rc"); if(!root) return;
   document.documentElement.classList.add("js");
-  const sec=document.getElementById("numbers"); if(!sec) return;
   const show=()=>{sec.classList.add("in");setTimeout(()=>sec.classList.add("settled"),1900)};
-  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){show();io.disconnect()}},{threshold:.2});io.observe(sec);setTimeout(show,10000)}else show();
-  const rows=[...sec.querySelectorAll(".rt tbody tr")], btn=document.getElementById("rtBtn"), label=document.getElementById("rtSel");
-  const select=r=>{rows.forEach(x=>x.classList.toggle("sel",x===r));btn.href=r.dataset.wa;label.innerHTML="Selected: <b></b>";label.querySelector("b").textContent=r.dataset.prop};
-  rows.forEach(r=>{r.addEventListener("click",e=>{if(!e.target.closest("a"))select(r)});r.addEventListener("focusin",()=>select(r))});
-  if(rows[0]) rows[0].classList.add("sel");
+  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){show();io.disconnect()}},{threshold:.15});io.observe(sec);setTimeout(show,10000)}else show();
+  const $=id=>document.getElementById(id), WA="6287781033323";
+  const sel=$("rcProp"), ins={rate:$("rcRate"),occ:$("rcOcc"),mgmt:$("rcMgmt"),opex:$("rcOpex"),lease:$("rcLease")};
+  const fx=()=>{let f={IDR:17500,AUD:1.43};try{const c=JSON.parse(localStorage.getItem("nw_fx")||"null");if(c&&c.IDR)f=c}catch(e){}return f};
+  const cur=()=>{try{const c=localStorage.getItem("nw_cur");if(c==="USD"||c==="AUD")return c}catch(e){}return "USD"};
+  const idrOf=s=>{s=String(s||"");const m=s.match(/([\d.,]+)\s*(B|billion|M|million)?/i);if(!m)return 0;let n=m[2]?parseFloat(m[1].replace(/,/g,"")):+m[1].replace(/[^\d]/g,"");if(m[2])n*=/^b/i.test(m[2])?1e9:1e6;return n>=1e8?n:0};
+  const leaseOf=l=>{if(/freehold/i.test(l.tenure||"")&&!/lease/i.test(l.lease||""))return 0;const s=String(l.lease||"");const y=s.match(/(20[3-9]\d|21\d\d)/);if(y)return Math.max(1,+y[1]-new Date().getFullYear());const n=s.match(/(\d{1,3})\s*(\+|years|yr|year)/i);return n?+n[1]:25};
+  // Market nightly rates (USD, entire homes, by bedrooms 1..5+). Source: AirROI, Oct 2025 – Sep 2026.
+  const MK={cg:[113,166,240,395,824],ul:[188,207,315,430,700]};
+  const AR=[[/canggu|berawa|batu belig|umalas|echo/i,"cg",1,"Canggu"],[/pererenan|seseh/i,"cg",.97,"Pererenan"],[/kerobokan/i,"cg",.84,"Kerobokan"],[/seminyak|legian/i,"cg",1.3,"Seminyak"],
+    [/nyanyi|cemagi|munggu|tumbak|dalung|kedungu|tabanan/i,"cg",.85,"Canggu, adjusted for a quieter area"],[/uluwatu|bingin|pecatu|padang|balangan|melasti/i,"ul",1,"Uluwatu"],
+    [/nusa dua|ungasan|pandawa|jimbaran|sawangan|kutuh/i,"ul",.7,"Bukit (Ungasan/Jimbaran)"],[/ubud|sidemen|tegallalang|gianyar/i,"cg",.53,"Ubud"]];
+  const mkt=l=>{const a=String(l.area||"")+" "+String(l.title||"");for(const r of AR)if(r[0].test(a))return r;return [null,"cg",.9,"Bali average"]};
+  const rateOf=l=>{const n=String(l.yield_note||"");let m=n.match(/USD\s*([\d,]+)\s*(?:per|\/)\s*night/i);if(m)return [Math.round(+m[1].replace(/,/g,"")/5)*5,"Rental rate from the listing"];m=n.match(/IDR\s*([\d,.]+)\s*(?:per|\/)\s*night/i);if(m)return [Math.round(+m[1].replace(/[,.]/g,"")/fx().IDR/5)*5,"Rental rate from the listing"];
+    const b=Math.min(Math.max(+l.bed||2,1),5),r=mkt(l),v=MK[r[1]][b-1]*r[2]*(/apart/i.test(l.type||"")?.9:1);return [Math.round(v/5)*5,`Market average, ${b}${b===5?"+":""} BR in ${r[3]} (AirROI, Oct 2025 – Sep 2026)`]};
+  const nm=l=>String(l.title||"")+(new RegExp(l.area,"i").test(l.title||"")?"":", "+l.area);
+  let L=[], cfg=null;
+  const money=(usd,short)=>{const c=cur(),f=fx();let v=usd,p="USD ";if(c==="AUD"){v=usd*f.AUD;p="AUD "}
+    if(short&&Math.abs(v)>=1e6)return p+(v/1e6).toFixed(2)+"M";return p+Math.round(v).toLocaleString("en-US")};
+  const pct=v=>(isFinite(v)?(v*100).toFixed(1):"–")+"%";
+  function setP(el){const p=(el.value-el.min)/(el.max-el.min)*100;el.style.setProperty("--p",p+"%")}
+  function defaults(l){const rr=rateOf(l);ins.rate.value=rr[0];document.getElementById("rcRateN").textContent=rr[1]+" · in USD";ins.occ.value=55;ins.mgmt.value=20;ins.opex.value=15;ins.lease.value=Math.min(100,Math.max(5,cfg.lease||25))}
+  function pick(i){const l=L[i];if(!l)return;const f=fx(),idr=idrOf(l.price),usd=+l.price_usd||(idr?idr/f.IDR:0);
+    cfg={l,usd,idr,lease:leaseOf(l)};defaults(l);$("rcLeaseF").hidden=!cfg.lease;$("rcDepR").hidden=!cfg.lease;
+    $("rcFacts").innerHTML=`<span>Price <b>${idr?"IDR "+Math.round(idr).toLocaleString("en-US"):"–"}</b></span><span>≈ <b>${money(usd)}</b></span><span>${l.bed||"–"} bed · ${(l.type||"").toLowerCase()}</span><span>${cfg.lease?cfg.lease+" years lease":"Freehold"}</span>`;
+    const dn=String(l.yield_note||"").trim();$("rcDev").innerHTML=dn?"<b>Developer’s note:</b> ":"";if(dn)$("rcDev").append(dn);
+    calc()}
+  function calc(){if(!cfg)return;Object.values(ins).forEach(setP);
+    const r=+ins.rate.value,o=+ins.occ.value/100,m=+ins.mgmt.value/100,x=+ins.opex.value/100,ly=cfg.lease?+ins.lease.value:0;
+    $("rcRateO").textContent="USD "+r;$("rcOccO").textContent=Math.round(o*100)+"%";$("rcMgmtO").textContent=Math.round(m*100)+"%";$("rcOpexO").textContent=Math.round(x*100)+"%";$("rcLeaseO").textContent=ly+" yrs";
+    const P=cfg.usd,G=r*365*o,fee=G*m,cost=G*x,N=G-fee-cost,D=ly?P/ly:0,T=N-D;
+    $("rcGross").textContent=money(G);$("rcFee").textContent="− "+money(fee);$("rcCost").textContent="− "+money(cost);$("rcNoi").textContent=money(N);
+    $("rcYield").textContent=P?pct(N/P):"–";$("rcDep").textContent="− "+money(D);$("rcPay").textContent=N>0&&P?(P/N).toFixed(1)+" yrs":"–";
+    $("rcTrue").textContent=P?pct((cfg.lease?T:N)/P):"–";
+    $("rcTrueSub").textContent=cfg.lease?`${money(T)} per year after spreading the price over ${ly} years`:`${money(N)} per year · freehold, no lease depreciation`;
+    const tot=Math.max(G,1),w=v=>Math.max(0,v/tot*100)+"%";$("rcB1").style.width=w(fee);$("rcB2").style.width=w(cost);$("rcB3").style.width=w(Math.min(D,Math.max(N,0)));$("rcB4").style.width=w(Math.max(T,cfg.lease?T:N));
+    const t=`Hi Novi, I used the return calculator on your website for "${nm(cfg.l)}". My assumptions: USD ${r}/night, ${Math.round(o*100)}% occupancy, ${Math.round(m*100)}% management, ${Math.round(x*100)}% running costs${ly?`, ${ly}-year lease`:""}. Result: ${$("rcTrue").textContent} net return${ly?" after lease depreciation":""}. Could you check these numbers against comparable villas and send me the developer's full assumptions?`;
+    $("rtBtn").href="https://wa.me/"+WA+"?text="+encodeURIComponent(t);
+    $("rtSel").innerHTML="Selected: <b></b>";$("rtSel").querySelector("b").textContent=nm(cfg.l)}
+  Object.values(ins).forEach(el=>el.addEventListener("input",calc));
+  sel.addEventListener("change",()=>pick(+sel.value));
+  $("rcReset").addEventListener("click",()=>{if(cfg){defaults(cfg.l);calc()}});
+  document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest(".curt button"))setTimeout(()=>{if(cfg)pick(+sel.value)},50)});
+  fetch("data/listings.json",{cache:"no-cache"}).then(r=>r.json()).catch(()=>typeof LISTINGS_FALLBACK!=="undefined"?LISTINGS_FALLBACK:{listings:[]}).then(d=>{
+    L=((d&&d.listings)||[]).filter(l=>idrOf(l.price)||+l.price_usd);
+    sel.innerHTML=L.map((l,i)=>`<option value="${i}">${nm(l).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</option>`).join("");
+    if(L.length)pick(0)});
 })();
 
 // ---- Hero: entrance, parallax, card tilt, magnetic buttons
