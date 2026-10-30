@@ -84,3 +84,4 @@ const urls = [SITE, SITE + "listings", ...all.map(l => SITE + "property/" + enco
 wr("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n")}\n</urlset>\n`);
 
 console.log(`Generated ${n} property pages + sitemap.xml (${urls.length} URLs)`);
+// Publish: 72-listing slider, spec icons, Bali ROI calculator, Playfair headings (2026-10-30)
