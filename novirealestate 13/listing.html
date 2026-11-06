@@ -172,8 +172,8 @@ const SITE="https://noviwidiawati.com/";
 const purl=l=>SITE+"property/"+encodeURIComponent(l.slug)+"/";
 const renderMain=(l,all)=>{
   const photos=(l.photos||[]).filter(p=>img(p));
-  const waText=encodeURIComponent(`Hi Novi, I'm interested in "${l.title}" (${l.area}, ${l.price}). Could you send me more details?\n${purl(l)}`);
-  const mail=`mailto:${EMAIL}?subject=${encodeURIComponent("Enquiry: "+l.title)}&body=${waText}`;
+  const waText=encodeURIComponent(`Hi Novi, I'm interested in "${l.title}"${l.ref?` (Ref ${l.ref})`:""} (${l.area}, ${l.price}). Could you send me more details?\n${purl(l)}`);
+  const mail=`mailto:${EMAIL}?subject=${encodeURIComponent("Enquiry: "+(l.ref?l.ref+" · ":"")+l.title)}&body=${waText}`;
   const fact=(k,v)=>v?`<div><small>${k}</small><b>${esc(v)}</b></div>`:"";
   return `
   <div class="crumb"><a href="./">Home</a> / <a href="listings.html">Listings</a> / ${esc(l.area)}</div>
@@ -185,7 +185,7 @@ const renderMain=(l,all)=>{
   <div class="layout">
     <div class="body">
       <div class="head"><span class="eyebrow">${esc(l.area)} · ${esc(l.tenure)}${l.status?` · ${esc(l.status)}`:""}</span><h1>${esc(l.title)}</h1>${l.summary?`<p class="sum">${esc(l.summary)}</p>`:""}</div>
-      <div class="facts">${fact("Bedrooms",l.bed_label||l.bed)}${fact("Bathrooms",l.bath)}${fact("Land",l.land)}${fact("Building",l.building)}${fact("Type",l.type)}${fact("Ownership",l.tenure)}${fact("Lease",l.lease)}${fact("Status",l.status)}</div>
+      <div class="facts">${fact("Bedrooms",l.bed_label||l.bed)}${fact("Bathrooms",l.bath)}${fact("Land",l.land)}${fact("Building",l.building)}${fact("Type",l.type)}${fact("Ownership",l.tenure)}${fact("Lease",l.lease)}${fact("Status",l.status)}${fact("Reference",l.ref)}</div>
       ${l.description?`<h2>About this property</h2><div class="desc">${md(l.description)}</div>`:""}
       ${(l.highlights||[]).length?`<h2>Highlights</h2><ul class="hl">${l.highlights.map(h=>`<li>${esc(h)}</li>`).join("")}</ul>`:""}
       ${l.yield_note?`<div class="note">${esc(l.yield_note)}</div>`:""}
