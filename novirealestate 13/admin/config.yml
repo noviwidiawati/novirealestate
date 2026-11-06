@@ -43,6 +43,7 @@ collections:
                 widget: string
                 hint: "Lowercase words joined by dashes, unique for each listing, e.g. villa-sunset-berawa. Do not change it after sharing the link."
                 pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Use lowercase letters, numbers and dashes only (no spaces)."]
+              - {label: "Reference code", name: ref, widget: string, required: false, hint: "NW- plus the next number, e.g. NW-091. Never change or reuse a code: Novi's private developer list uses it."}
               - {label: "Show on homepage", name: featured, widget: boolean, default: true}
               - {label: "Area", name: area, widget: string, hint: "e.g. Canggu, Pererenan, Uluwatu"}
               - {label: "Property type", name: type, widget: select, options: ["Villa", "Apartment", "Land", "House", "Commercial"], default: "Villa"}
@@ -52,6 +53,7 @@ collections:
               - {label: "Price (USD, from developer)", name: price_usd, widget: number, value_type: int, required: false, hint: "Numbers only, e.g. 415000. Leave empty if the developer gives no USD price - the site will then estimate USD/AUD from the IDR price at today's rate."}
               - {label: "Price note", name: price_note, widget: string, required: false, hint: "e.g. Offers over (put the USD price in the field above, not here)"}
               - {label: "Bedrooms", name: bed, widget: number, value_type: int, min: 0, required: false}
+              - {label: "Bedroom label (optional)", name: bed_label, widget: string, required: false, hint: "Shown instead of 'N bed', e.g. Studio. Keep Bedrooms as a number for the filters."}
               - {label: "Bathrooms", name: bath, widget: number, value_type: int, min: 0, required: false}
               - {label: "Land size", name: land, widget: string, required: false, hint: "e.g. 300 m² (leave empty for apartments)"}
               - {label: "Building size", name: building, widget: string, required: false, hint: "e.g. 220 m²"}
